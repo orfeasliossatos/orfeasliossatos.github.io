@@ -2,14 +2,14 @@
 # This file contains configuration flags to customize your site
 #
 
-# Name of your site (displayed in the header)
-name: Reverie
+# Name of site
+name: Orfeas Liossatos
 
-# Name of the author
-author: Amit Merchant
+# Name of author
+author: Orfeas Liossatos
 
-# Short bio or description (displayed in the header)
-description: An elegant Jekyll theme
+# Description
+description: Math, Gamedev, Life
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/reverie.png
@@ -21,20 +21,20 @@ avatar: /images/reverie.png
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email: amit.d.merchant@gmail.com
+  email: oiliossatos@gmail.com
   facebook:
   flickr:
-  github: amitmerchant1990/reverie
+  github: orfeasliossatos
   instagram:
-  linkedin: 
+  linkedin: orfeas-liossatos-905956206
   pinterest:
   rss: rss
-  twitter: amit_merchant
+  twitter:
   stackoverflow: 
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
   playconsole:
-  mastodon: # <your-mastodon-instance>/@<your-user-name> eg. fosstodon.org/@username
+  mastodon: # mathstodon.xyz/@xMissingno
 
 # Enter your Disqus shortname (not your username) to enable commenting on posts
 # You can find your shortname on the Settings page of your Disqus account
