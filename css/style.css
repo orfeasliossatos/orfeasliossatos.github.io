@@ -14,14 +14,13 @@
 
 body {
     --body-bg-color: hsl(45, 100%, 97.5%);
-    --body-color: hsl(250, 100%, 12%);
-
+    --body-color: hsl(250, 100%, 8%);
     background-color: var(--body-bg-color);
     color: var(--body-color);
     display: block;
     font-family: 'Source Serif Pro';
     font-size: 1.2rem;
-    margin: 0 auto;
+    margin: 1rem auto;
     padding: 0 20px;
     max-width: 800px;
 }
@@ -72,6 +71,10 @@ h3 {
 
 ul {
     padding-left: 2rem;
+}
+
+i {
+    font-size: 2rem;
 }
 .emph {
     font-weight: bold;
@@ -180,10 +183,6 @@ ul {
     text-align: center;
 }
 
-.icon-bar {
-    text-align: center;
-    padding-bottom: 1rem;
-}
 
 #mastodon-icon:hover, #mastodon-icon:focus {
     opacity:1;
@@ -237,6 +236,18 @@ ul {
     text-align: center;
     font-weight: bold;
     border-bottom: 2px solid var(--body-color);
+}
+
+#contact-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+.post {
+    background-color: var(--body-bg-color);
+    padding: 0 1rem 1rem 1rem;
 }
 
 @media only screen and (max-width: 650px) {
