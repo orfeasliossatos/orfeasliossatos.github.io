@@ -70,9 +70,8 @@ h3 {
     margin-block-end: 1rem;   
 }
 
-ul ul {
-    text-indent: 0.5rem;
-    list-style-position: inside;
+ul {
+    padding-left: 2rem;
 }
 .emph {
     font-weight: bold;
@@ -131,21 +130,22 @@ ul ul {
 .card-caption {
     grid-row-start: 2;
     
-    color: var(--body-color);
-    border-top: 1px solid var(--body-color);
+    margin: 0;
+    border: 1px solid var(--body-color);
     
     display: flex;
     flex-direction: column;
     justify-content: center;
 	align-items: center;
-    padding-top: 8px;
-
+    
+    color: var(--body-color);
     font-variant: small-caps;
     text-decoration: none;
     text-align: center;
     font-size: 1.2rem;
     line-height: 1.2rem;
     word-spacing: -1px;
+
 }
 
 .internal {
@@ -305,4 +305,6 @@ ul ul {
         display:block;
         float:right;
     }
+
+    
 }
