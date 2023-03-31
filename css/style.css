@@ -14,7 +14,8 @@
 
 body {
     --body-bg-color: hsl(45, 100%, 97.5%);
-    --body-color: hsl(250, 100%, 8%);
+    --body-color: #070029;
+    --switch-bg-color: hsl(0, 53%, 65%);
     background-color: var(--body-bg-color);
     color: var(--body-color);
     display: block;
@@ -23,6 +24,7 @@ body {
     margin: 1rem auto;
     padding: 0 20px;
     max-width: 800px;
+    
 }
 
 
@@ -36,6 +38,7 @@ nav {
 
 div {
     display: block;
+    
 }
 
 p {
@@ -73,9 +76,6 @@ ul {
     padding-left: 2rem;
 }
 
-i {
-    font-size: 2rem;
-}
 .emph {
     font-weight: bold;
     letter-spacing: 0.00rem;
@@ -100,9 +100,11 @@ i {
 }
 
 .card-container {
-    display: flex;
+    display: grid;
     margin-inline: auto;
-    flex-flow: row wrap;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+
     gap: 1.5rem;
     padding: 1rem;
 }
@@ -126,7 +128,12 @@ i {
 
 .card-image {
     display: block;
+    object-fit: cover;
     grid-row-start: 1;
+    align-self: center;
+    justify-self: center;
+    max-height:120px;
+    max-width:120px;
     
 }
 
@@ -149,6 +156,117 @@ i {
     line-height: 1.2rem;
     word-spacing: -1px;
 
+}
+
+.dark {
+    opacity: 0.2;
+}
+
+.symbol-table {
+    display: flex;
+    padding-top: 2rem;
+    margin-bottom: 300px;
+    justify-content: space-around;
+    max-height: 0px;
+
+}
+
+.symbol-container {
+    display: grid;
+    text-align: center;
+    
+}
+
+#initial {
+    grid-template-rows: repeat(7, 1fr);
+}
+
+#final {
+    grid-template-columns: repeat(8, 1fr);
+}
+
+#tones {
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.group-container {
+    display: grid;
+}
+
+#initial .group-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#final .group-container {
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.symbol {
+    border-radius: 0%;
+    outline: 1px solid var(--body-color);
+    outline-offset: -3px;
+    height: 5vw;
+    width: 5vw;
+    max-width: 40px;
+    max-height: 40px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    display: flex;
+    font-size: 1rem;
+}
+
+input:checked + label {
+    background-color: var(--switch-bg-color);
+    outline: 3px solid var(--body-color);
+}
+
+input {
+    display: none;    
+}
+
+#full-syllable {
+    text-align: center;
+}
+
+.table-container {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+
+.table-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.table-container::-webkit-scrollbar-track {
+	border: 5px solid var(--body-bg-color);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+	background-color: var(--switch-bg-color);
+	border-radius: 100%;
+}
+
+.table-container::-webkit-scrollbar-button {
+    display: none;
+}
+
+
+#character-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 0;
+}
+
+#character-table td:first-child {
+    text-align: center;
+    font-size: 3rem;
+}
+
+#character-table td {
+    border-style: solid;
+    border-width: 0px 0 1px 0;
 }
 
 .internal {
@@ -270,6 +388,20 @@ i {
         line-height: 1.4;
     }
 
+    .symbol-table {
+        margin-bottom: 38vw;
+    }
+
+    input:checked + label {
+
+        outline: 0.4vw solid var(--body-color);
+    }
+
+    .symbol {
+        font-size: 2vw;
+        outline-offset: -0.4vw;
+        outline-width: 0.1vw;
+    }
 
     .split span {
         display:block;
@@ -278,6 +410,15 @@ i {
     .split span::before {
         content:"— "
     }
+
+    .card {
+        display:block;
+    }
+    .card-caption {
+        display:none;
+    }
+
+    
 }
   
 @media only screen and (min-width: 650px) {
@@ -291,7 +432,7 @@ i {
     }
 
     main {
-        min-height: 100vh;
+        
         display: flex;
         flex-flow: column wrap;
     }

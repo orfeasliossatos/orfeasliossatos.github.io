@@ -1,0 +1,26 @@
+{
+    "None" : ["a", "o", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "er", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ueng", "i", "ia", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe", "üan", "ün", "iong"],
+    "b"    : ["a", "o", "ai", "ei", "ao", "an", "ang", "en", "eng", "u", "i", "ie", "iao", "ian", "in", "ing"],
+    "p"    : ["a", "o", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "i", "ie", "iao", "ian", "in", "ing"],
+    "m"    : ["a", "o", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "i", "ie", "iao", "iu", "ian", "in", "ing"],
+    "f"    : ["a", "o", "ei", "ou", "an", "ang", "en", "eng", "u"],
+    "d"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "uo", "ui", "uan", "un", "ong", "i", "ia", "ie", "iao", "iu", "ian", "ing"],
+    "t"    : ["a", "e", "ai", "ao", "ou", "an", "ang", "eng", "u", "uo", "ui", "uan", "un", "ong", "i", "ie", "iao", "ian", "ing"],
+    "n"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "uo", "uan", "un", "ong", "i", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe"],
+    "l"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "eng", "u", "uo", "uan", "un", "ong", "i", "ia", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe"],
+    "g"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ong"],
+    "k"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ong"],
+    "h"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ong"],
+    "j"    : ["i", "ia", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe", "üan", "ün", "iong"],
+    "q"    : ["i", "ia", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe", "üan", "ün", "iong"],
+    "x"    : ["i", "ia", "ie", "iao", "iu", "ian", "iang", "in", "ing", "ü", "üe", "üan", "ün", "iong"],
+    "zh"   : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ong", "i*"],
+    "ch"   : ["a", "e", "ai", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "ong", "i*"],
+    "sh"   : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uai", "ui", "uan", "uang", "un", "i*"],
+    "r"    : ["e", "ao", "ou", "an", "ang", "en", "eng", "u", "ua", "uo", "uan", "un", "ong", "i*"],
+    "z"    : ["a", "e", "ai", "ei", "ao", "ou", "an", "ang", "en", "eng", "u", "uo", "ui", "uan", "un", "ong", "i*"],
+    "c"    : ["a", "e", "ai", "ao", "ou", "an", "ang", "en", "eng", "u", "uo", "ui", "uan", "un", "ong", "i*"],
+    "s"    : ["a", "e", "ai", "ao", "ou", "an", "ang", "en", "eng", "u", "uo", "ui", "uan", "un", "ong", "i*"]
+}
+
+
