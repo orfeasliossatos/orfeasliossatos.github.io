@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,7 +14,7 @@
         <nav class="sidebar">
             <div class="sidebar-links">
                 <a class="internal" title="Landing page" href="../index.html">Home</a>
-                <a class="internal" title="Biography,, interests, resume" href="../author.html">Author</a>
+                <a class="internal" title="Biography, interests, resume" href="../author.html">Author</a>
                 <a class="internal" title="Contact information" href="../contact.html">Contact</a>
                 <a class="internal" title="News, plans, important information" href="../news.html">News</a>
             </div>
@@ -27,7 +27,7 @@
             </section>
             
             <section>
-                <p>This is an interactive table of <i>pinyin</i>, a system for learning the pronounciation of Chinese characters (hanzi), which combine three elements.</p>
+                <p>This is an interactive table of <i>pinyin</i>, a system for learning the pronunciation of Chinese characters (hanzi), which combine three elements.</p>
                 <ul>    
                     <li>The "initial" is how the syllable begins,</li>
                     <li>The "final" is how the syllable ends,</li>
@@ -153,13 +153,19 @@
                         </div>
                     </div>
                 </div>
-                <div id="full-syllable">
-                    Pinyin: <b>...</b>
+                <div>
+                    
+                    <span id="full-syllable"  style="display:none;">
+                        <audio id="audio-player"></audio>
+                        <button id="audio-button" onclick="playAudio()">&#128266;</button>
+                        Pinyin: <b>...</b>                         
+                    </span>
+                    
                 </div>
                 <hr>  
             </section>
             <section>
-                <div class="table-container">
+                <div id="table-container" style="display:none;">
                     <table id="character-table">
                         <thead>
                             <tr>
@@ -175,7 +181,7 @@
             </section>
 
             <section>
-                <p>Full pinyin syllables are not always simple combinations of the written initials and finals. This is due to the  null initial <b>&empty;</b> that transforms into <b>y</b> or <b>w</b> depending on the vowel of the final. Importantly, this does not change the pronunciation, as Mandarin speakers don't distinguish between "ee" and "yee" although they tend to glide into these vowels.</p> 
+                <p>Full pinyin syllables are not always simple combinations of the written initials and finals. This is due to the  null initial <b>&empty;</b> that transforms into <b>y</b> or <b>w</b> depending on the vowel of the final. Importantly, this does not change the pronunciation, as Mandarin speakers do not distinguish between "ee" and "yee" although they tend to glide into these vowels.</p> 
 
                 <ul>    
                     <li><i>yi</i> = &empty; + <i>i</i>,

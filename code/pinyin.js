@@ -58,6 +58,16 @@ var selTone;
 // Final pinyin syllable
 var syllableStr;
 
+// Play audio
+function playAudio(audioFile) {
+    var audioPlayer = document.getElementById("audio-player");
+    
+    // For whatever reason, Javascript doesn't like umlauts.
+    audioPlayer.src = "../data/audio-backup/"+audioFile.replace(/[ü]/g, "ue")+".mp3"
+    
+    audioPlayer.play();
+}
+
 // Fetch the valid pinyin data and invalidator listeners on initials
 fetch("../data/valid-pinyin.json")
     .then(response => response.json())
@@ -194,6 +204,8 @@ fetch("../data/valid-pinyin.json")
                     && !(valFinal[0] == "a" || valFinal[0] == "e" || valFinal[0] == "o")) ? 1 : 0 
                 
                 
+                const valFinalNoAccent = valFinal
+
                 if (selTone != "" && valFinal != "") {
                     let charArray = valFinal.split("")
                     charArray[accentIndex] = toneDict[valFinal[accentIndex]][parseInt(selTone)-1]
@@ -206,10 +218,19 @@ fetch("../data/valid-pinyin.json")
                 if (selInitial != "" && selFinal != "" && selTone != "") {
                     syllableStr = valInitial+valFinal
                 } else {
-                    syllableStr = "..."
+                    syllableStr = ""
                 }
                 
-                syllable.innerHTML = "Pinyin: <b>" + syllableStr + "</b>"
+                const audiostr = "\'"+valInitial+valFinalNoAccent+selTone+"\'"
+
+                const tableContainer = document.getElementById("table-container")
+
+                tableContainer.style.display = syllableStr=="" ? 'none' : 'block'
+                syllable.style.display =  syllableStr=="" ? 'none' : 'block'
+                syllable.textContent = syllableStr
+                if (selTone != 5) {
+                    syllable.innerHTML += "<audio id=\"audio-player\"></audio>" + "<button id=\"audio-button\" onclick=\"playAudio("+ audiostr +")\">&#128266;</button>"
+                }
 
             })
         });
@@ -239,7 +260,7 @@ fetch("../data/valid-pinyin.json")
                 
             })
         })                    
-        
+    
     
     }).catch(error => console.error('Error:', error))
 
