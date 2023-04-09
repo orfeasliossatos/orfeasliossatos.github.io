@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Orfeas | Pinyin</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../author.html">Author</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="News, plans, important information" href="../news.html">News</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Pinyin Table</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <p>This is an interactive table of <i>pinyin</i>, a system for learning the pronunciation of Chinese characters (hanzi), which combine three elements.</p>
+                <ul>    
+                    <li>The "initial" is how the syllable begins,</li>
+                    <li>The "final" is how the syllable ends,</li>
+                    <li>The "tone" is the syllable's pitch contour.</li>
+                </ul>
+
+                <p>Select a combination below.</p>
+                <hr>
+            </section>
+
+            <section>
+                <div class="symbol-table"> 
+                    <div class="symbol-container" id="initial">
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="p" value="p"><label class="symbol" for="p">p</label>
+                            <input type="radio" name="initial" id="b" value="b"><label class="symbol" for="b">b</label>
+                            <input type="radio" name="initial" id="m" value="m"><label class="symbol" for="m">m</label>
+                            <input type="radio" name="initial" id="f" value="f"><label class="symbol" for="f">f</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="d" value="d"><label class="symbol" for="d">d</label>
+                            <input type="radio" name="initial" id="t" value="t"><label class="symbol" for="t">t</label>
+                            <input type="radio" name="initial" id="n" value="n"><label class="symbol" for="n">n</label>
+                            <input type="radio" name="initial" id="l" value="l"><label class="symbol" for="l">l</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="zh" value="zh"><label class="symbol" for="zh">zh</label>
+                            <input type="radio" name="initial" id="ch" value="ch"><label class="symbol" for="ch">ch</label>
+                            <input type="radio" name="initial" id="sh" value="sh"><label class="symbol" for="sh">sh</label>
+                            <input type="radio" name="initial" id="r" value="r"><label class="symbol" for="r">r</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="z" value="z"><label class="symbol" for="z">z</label>
+                            <input type="radio" name="initial" id="c" value="c"><label class="symbol" for="c">c</label>
+                            <input type="radio" name="initial" id="s" value="s"><label class="symbol" for="s">s</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="g" value="g"><label class="symbol" for="g">g</label>
+                            <input type="radio" name="initial" id="k" value="k"><label class="symbol" for="k">k</label>
+                            <input type="radio" name="initial" id="h" value="h"><label class="symbol" for="h">h</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="j" value="j"><label class="symbol" for="j">j</label>
+                            <input type="radio" name="initial" id="x" value="x"><label class="symbol" for="x">x</label>
+                            <input type="radio" name="initial" id="q" value="q"><label class="symbol" for="q">q</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="initial" id="None" value="None"><label class="symbol" for="None">&empty;</label>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="symbol-container" id="final">
+                        <div class="group-container">
+                            <input type="radio" name="final" id="a" value="a"><label class="symbol" for="a">a</label>
+                            <input type="radio" name="final" id="ai" value="ai"><label class="symbol" for="ai">ai</label>
+                            <input type="radio" name="final" id="an" value="an"><label class="symbol" for="an">an</label>
+                            <input type="radio" name="final" id="ang" value="ang"><label class="symbol" for="ang">ang</label>
+                            <input type="radio" name="final" id="ao" value="ao"><label class="symbol" for="ao">ao</label>
+                        </div>
+                        
+                        <div class="group-container">
+                            
+                            <input type="radio" name="final" id="e" value="e"><label class="symbol" for="e">e</label>
+                            <input type="radio" name="final" id="ei" value="ei"><label class="symbol" for="ei">ei</label>
+                            <input type="radio" name="final" id="en" value="en"><label class="symbol" for="en">en</label>
+                            <input type="radio" name="final" id="eng" value="eng"><label class="symbol" for="eng">eng</label>
+                            <input type="radio" name="final" id="er" value="er"><label class="symbol" for="er">er</label>
+                        </div>
+                    
+                        <div class="group-container">
+                            <input type="radio" name="final" id="i" value="i"><label class="symbol" for="i" value="i">i</label>
+                            <input type="radio" name="final" id="ia" value="ia"><label class="symbol" for="ia">ia</label>
+                            <input type="radio" name="final" id="iao" value="iao"><label class="symbol" for="iao">iao</label>
+                            <input type="radio" name="final" id="ian" value="ian"><label class="symbol" for="ian">ian</label>
+                            <input type="radio" name="final" id="iang" value="iang"><label class="symbol" for="iang">iang</label>
+                        </div>
+                        
+                        <div class="group-container">
+                            <input type="radio" name="final" id="ie" value="ie"><label class="symbol" for="ie">ie</label>
+                            <input type="radio" name="final" id="in" value="in"><label class="symbol" for="in">in</label>
+                            <input type="radio" name="final" id="ing" value="ing"><label class="symbol" for="ing">ing</label>
+                            <input type="radio" name="final" id="iong" value="iong"><label class="symbol" for="iong">iong</label>
+                            <input type="radio" name="final" id="iu" value="iu"><label class="symbol" for="iu">iu</label>
+                            <input type="radio" name="final" id="i*" value="i*"><label class="symbol" for="i*">i*</label>
+                        </div>
+                        
+                        <div class="group-container">
+                            <input type="radio" name="final" id="u" value="u"><label class="symbol" for="u">u</label>
+                            <input type="radio" name="final" id="ua" value="ua"><label class="symbol" for="ua">ua</label>
+                            <input type="radio" name="final" id="uai" value="uai"><label class="symbol" for="uai">uai</label>
+                            <input type="radio" name="final" id="uan" value="uan"><label class="symbol" for="uan">uan</label>
+                            <input type="radio" name="final" id="uang" value="uang"><label class="symbol" for="uang">uang</label>
+                        </div>
+                        <div class="group-container">
+                            <input type="radio" name="final" id="ueng" value="ueng"><label class="symbol" for="ueng">ueng</label>
+                            <input type="radio" name="final" id="ui" value="ui"><label class="symbol" for="ui">ui</label>
+                            <input type="radio" name="final" id="uo" value="uo"><label class="symbol" for="uo">uo</label>
+                            <input type="radio" name="final" id="un" value="un"><label class="symbol" for="un">un</label>
+                        </div>
+                    
+                        <div class="group-container">
+                            <input type="radio" name="final" id="ü" value="ü"><label class="symbol" for="ü">ü</label>
+                            <input type="radio" name="final" id="üan" value="üan"><label class="symbol" for="üan">üan</label>
+                            <input type="radio" name="final" id="üe" value="üe"><label class="symbol" for="üe">üe</label>
+                            <input type="radio" name="final" id="ün" value="ün"><label class="symbol" for="ün">ün</label>
+                        </div>
+
+                        <div class="group-container">
+                            <input type="radio" name="final" id="o" value="o"><label class="symbol" for="o">o</label>
+                            <input type="radio" name="final" id="ong" value="ong"><label class="symbol" for="ong">ong</label>
+                            <input type="radio" name="final" id="ou" value="ou"><label class="symbol" for="ou">ou</label>
+                        </div>
+                    </div>
+                    
+                    <div class="symbol-container" id="tones">
+                        <div class="group-container">
+                            <input type="radio" name="tone" id="1" value="1"><label class="symbol" for="1">1</label>
+                            <input type="radio" name="tone" id="2" value="2"><label class="symbol" for="2">2</label>
+                            <input type="radio" name="tone" id="3" value="3"><label class="symbol" for="3">3</label>
+                            <input type="radio" name="tone" id="4" value="4"><label class="symbol" for="4">4</label>
+                            <input type="radio" name="tone" id="5" value="5"><label class="symbol" for="5">5</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    
+                    <span id="full-syllable"  style="display:none;">
+                        <audio id="audio-player"></audio>
+                        <button id="audio-button" onclick="playAudio()">&#128266;</button>
+                        Pinyin: <b>...</b>                         
+                    </span>
+                    
+                </div>
+                <hr>  
+            </section>
+            <section>
+                <div id="table-container" style="display:none;">
+                    <table id="character-table">
+                        <thead>
+                            <tr>
+                              <th style="width: 30%;"></th>
+                              <th style="width: 70%; padding-right: 1rem;"></th>
+                            </tr>
+                          </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <p>Full pinyin syllables are not always simple combinations of the written initials and finals. This is due to the  null initial <b>&empty;</b> that transforms into <b>y</b> or <b>w</b> depending on the vowel of the final. Importantly, this does not change the pronunciation, as Mandarin speakers do not distinguish between "ee" and "yee" although they tend to glide into these vowels.</p> 
+
+                <ul>    
+                    <li><i>yi</i> = &empty; + <i>i</i>,
+                    <li><i>wu</i> = &empty; + <i>u</i>,
+                    <li><i>yü</i> = &empty; + <i>ü</i>.
+                </ul>
+
+                <p>This goes onto impact the spelling of the final, which may drop its first letter and even mutate into an alternate spelling.</p>
+
+                <ul>    
+                    <li><i>you</i> = &empty; + <i>iu</i> since <i>iu</i> is a contraction of  <i>iou</i>,</li>
+                    <li><i>wei</i> = &empty; + <i>ui</i> since <i>ui</i> is a contraction of <i>uei</i>,</li>
+                    <li><i>wen</i> = &empty; + <i>un</i> since <i>un</i> is a contraction of <i>uen</i>.</li>
+                </ul>
+                <p>There are many interesting things to learn about Chinese phonetics. My favourite resource is the <a href="https://resources.allsetlearning.com/chinese/grammar" class="external">Chinese Pronunciation Wiki</a> as they strike a nice balance between pedagogy and rigour.</p>
+            </section>
+
+            <section>
+                <h2>Sources</h2>
+                <hr>
+                <ul>
+                    <li>Pinyin facts from <a href="https://resources.allsetlearning.com/chinese/grammar" class="external">Chinese Pronunciation Wiki</a></li>
+                    <li>Chinese character data from <a href="https://www.skishore.me/makemeahanzi/" class="external">Make Me A Hanzi</a></li>
+                    <li>Pinyin table data from <a href="https://www.yellowbridge.com/" class="external">YellowBridge</a> </li>
+                    <li>Cover image from <a href="https://en.wikipedia.org/wiki/File:Hanzi.svg" class="external">Wikimedia Commons</a></li>
+                </ul>
+            </section> 
+        </article>
+    </main>
+    <script src="../code/pinyin.js"></script>
+    
+</body>
+</html>

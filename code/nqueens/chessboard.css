@@ -1,0 +1,36 @@
+#chessboard {
+    width: 80vw;
+    height: 80vw;
+    max-width: 400px;
+    max-height: 400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+
+        
+    border: 1px solid var(--body-color);
+    outline: 1px solid var(--body-color);
+    outline-offset: 5px;
+    outline-style: dashed;
+    box-shadow: -10px 10px var(--body-color);
+}
+
+.square {
+    width: 10vw;
+    height: 10vw;
+    max-width: 50px;
+    max-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 1px solid var(--body-color);
+}
+
+.square:hover {
+    border: 3px solid var(--body-color);
+}
+

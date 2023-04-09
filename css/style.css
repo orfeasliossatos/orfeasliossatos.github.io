@@ -13,9 +13,9 @@
 /* ELEMENTS */
 
 body {
-    --body-bg-color: hsl(45, 100%, 97.5%);
+    --body-bg-color: #fffcf2;
     --body-color: #070029;
-    --switch-bg-color: hsl(0, 53%, 65%);
+    --switch-bg-color: #d57676;
     background-color: var(--body-bg-color);
     color: var(--body-color);
     display: block;
