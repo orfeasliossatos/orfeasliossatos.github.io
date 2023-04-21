@@ -34,3 +34,75 @@
     border: 3px solid var(--body-color);
 }
 
+#DFBT {
+    
+}
+
+#DFBTsols {
+    display: flex;
+    justify-content: center;
+}
+
+#DFBTbuttons {
+    display: flex;
+    
+    margin: 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 12.5px;
+    
+}
+
+.DFBTbutton {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    width: 25px;
+    height: 25px;
+    max-width: 25px;
+    max-height: 25px;
+
+    cursor: pointer;
+
+    
+    outline: 1px solid var(--body-color);
+    outline-offset: 5px;
+    outline-style: solid;
+
+}
+
+.DFBTbutton:hover {
+    outline: 3px solid var(--body-color);
+}
+
+#DFBTboard {
+    width: 40vw;
+    height: 40vw;
+    max-width: 200px;
+    max-height: 200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+
+        
+    border: 1px solid var(--body-color);
+    outline: 1px solid var(--body-color);
+    outline-offset: 5px;
+    outline-style: dashed;
+    box-shadow: -10px 10px var(--body-color);
+}
+
+.DFBTsquare {
+    width: 10vw;
+    height: 10vw;
+    max-width: 50px;
+    max-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    box-sizing: border-box;
+    border: 1px solid var(--body-color);
+}

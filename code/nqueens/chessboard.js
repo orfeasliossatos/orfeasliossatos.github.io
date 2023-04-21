@@ -10,7 +10,7 @@ for (let i = 0; i < 8; i++) {
         square.dataset.row = i;
         square.dataset.col = j;
         square.style.backgroundColor = computeBackgroundColor(i, j)
-        square.addEventListener("click", moveQueen);
+        square.addEventListener("click", placeQueen);
         board.appendChild(square);
     }
 }
@@ -20,7 +20,7 @@ function computeBackgroundColor(row, col) {
 }
 
 // Function to move queens
-function moveQueen(event) {
+function placeQueen(event) {
     let square = event.target;
     let row = parseInt(square.dataset.row);
     let col = parseInt(square.dataset.col);
@@ -58,4 +58,125 @@ function moveQueen(event) {
             squares[i].style.backgroundColor = "#8FBC8F";
         }
     }
+}
+
+// DFBT
+let DFBTboard = document.getElementById("DFBTboard");
+let DFBTsols = document.getElementById("DFBTsols")
+var isDark = false;
+let DFBTsquares = []
+DFBTboardSize = 4
+
+// Create the chessboard
+for (let i = 0; i < DFBTboardSize; i++) {
+    for (let j = 0; j < DFBTboardSize; j++) {
+        let square = document.createElement("div");
+        square.className = "DFBTsquare";
+        square.dataset.row = i;
+        square.dataset.col = j;
+        DFBTsquares.push(square)
+        square.style.backgroundColor = computeBackgroundColor(i, j)
+        DFBTboard.appendChild(square);
+    }
+}
+
+DFBTboardState = [-1,-1,-1,-1]
+DFBTfinished = false
+currCol = 0
+solCount = 0
+prevFoundSolution = false
+
+// Perform one step of the DFBT algorithm, 
+function DFBTstep() {
+
+    if (DFBTfinished) { return; }
+
+
+    // Recompute square colours
+    if (prevFoundSolution) {
+        prevFoundSolution != prevFoundSolution
+        for (let i=0; i < DFBTsquares.length; i++) {
+            let otherRow = parseInt(DFBTsquares[i].dataset.row);
+            let otherCol = parseInt(DFBTsquares[i].dataset.col);
+            DFBTsquares[i].style.backgroundColor = computeBackgroundColor(otherRow, otherCol);
+        }
+    }
+
+    // Increment queen at current column
+    DFBTboardState[currCol] += 1
+    currRow = DFBTboardState[currCol]
+
+    if (currRow == DFBTboardSize) {
+        DFBTboardState[currCol] = -1
+        currCol -= 1
+        
+        if (currCol == -1) {
+            DFBTfinished = true;
+            DFBTsols.textContent = "Finished. Solutions found:  " + solCount
+        }
+
+    } else {
+
+        // Check valid board?
+        let valid = true
+        for (let i = 0; i < currCol; i++) {
+            otherRow = DFBTboardState[i]
+            otherCol = i
+            if (currRow == otherRow || otherRow + otherCol === currRow + currCol || otherRow - otherCol === currRow - currCol) {
+                valid = false
+                break;
+            }
+        }
+
+        // If valid, go to next column
+        if (valid) {
+            currCol += 1
+
+            // If final column, a solution has been found
+            if (currCol == DFBTboardSize) {
+                solCount += 1
+                currCol -= 1
+
+                // Update graphical solution count
+                DFBTsols.textContent = "Solutions found: " + solCount
+
+                // Turn squares green
+                for (let i=0; i < DFBTsquares.length; i++) {
+                    DFBTsquares[i].style.backgroundColor = "#8FBC8F";
+                }
+                
+                // Mark this flag to draw back original colors
+                prevFoundSolution = true
+            }
+        }
+    
+    }
+
+    // Undraw the queens
+    for (let i = 0; i < DFBTsquares.length; i++) {
+        DFBTsquares[i].textContent=""
+    }
+
+    // Redraw queens
+    for (let i = 0; i <= currCol; i++) {
+        thatRow = DFBTboardState[i]
+        if (thatRow != -1) {
+            DFBTsquares[i+DFBTboardSize*thatRow].textContent = "♕";            
+        }
+    }
+
+    
+}
+
+function DFBTreset() {
+    DFBTfinished = false;
+    DFBTboardState = [-1,-1,-1,-1]
+
+    for (let i = 0; i < DFBTboardSize*DFBTboardSize; i++) {
+        DFBTsquares[i].textContent=""
+    }
+
+    DFBTsols.textContent = "Solutions found: 0"
+    currCol = 0
+    solCount = 0
 }
