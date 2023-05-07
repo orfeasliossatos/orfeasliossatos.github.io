@@ -20,6 +20,7 @@
                 <a class="internal" title="Landing page" href="../index.html">Home</a>
                 <a class="internal" title="Biography, interests, resume" href="../author.html">Author</a>
                 <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
                 <a class="internal" title="News, plans, important information" href="../news.html">News</a>
             </div>
         </nav>
@@ -31,12 +32,12 @@
             </section>
             
             <section>
-                <p>	When I was in highschool, I braved an applied mathematics class in the dustiest computer room known to man. It was like a dungeon, where photons dared not enter lest they be immediately subsumed by the blinding blaze of the computer screens. Under the watchful eye of a chalk-dust-coated punch-card programmer, we would wield lines of code like swords and wrestle with the nastiest algorithms, in our quest to emerge victorious in the realm of nerddom. </p>
-                <p> One fateful Friday afternoon, our professor issued a challenge. "How many configurations of 8 queens on a chessboard are there, where none of the regal ladies can attack each other?". With bonus points on the next test on the line, and a deadline set for Monday, I got to work. Before I reveal how I found every configuration, can you find one? </p>
+                <p style="font-style:italic"> This post is based on a report I wrote with Jean-Baptiste Michel and Gaiëtan Renault for the class Markov Chains and Applications (EPFL, 2022).</p>
+                <p>	When I was in highschool, I braved an applied mathematics class in the dustiest computer room known to man. It was like a dungeon, where photons dared not enter lest they be immediately subsumed by the blinding blaze of the computer screens. </p>
+                <p> One fateful Friday afternoon, our professor issued a challenge. "How many configurations of 8 queens on a chessboard are there, where none of the queens can attack each other?". Before I reveal how I found every configuration, can you find one? </p>
                 <div id="chessboard"></div>
                 <p style="text-align:center;font-style: italic;">Click anywhere!</p>
-                <p>	The first thing we might want to think about is giving the boot to any configurations that are obviously wrong, like, if all the queens are huddled up in a corner,                    or standing in a conga line. In other words, we need to invent a rule of thumb that lets us see only the configurations that we care about. </p>
-                <p> We can imagine advancing one column at a time, trying every row until we find a safe position for her highness. Sometimes we will get stuck and have to go back one column. Inductively, finding a safe position for the queen in the final column is the same as finding a complete solution to the puzzle, since all the previous queens are also safe. This algorithm is called depth-first backtracking. Step through animation below to watch how it works on a smaller board.</p>
+                <p>	The first thing we might want to think about is skipping any configurations that are obviously wrong, like, if all the queens are huddled up in a corner, or standing in a line. We can imagine considering one column at a time, trying every row until we find a safe position. Sometimes we will get stuck and have to go back one column. Inductively, finding a safe position for the queen in the final column is the same as finding a complete solution to the puzzle, since all the previous queens are also safe. This algorithm is called depth-first backtracking. Step through animation below to watch how it works on a smaller board.</p>
                 <div id=DFBTbuttons>
                     <div class="DFBTbutton" onclick=DFBTreset()>↻</div>
                     <div class="DFBTbutton" onclick=DFBTstep()>→</div>
@@ -46,8 +47,8 @@
                     <div id="DFBTsols">Solutions found: 0</div>
                 </div>
                 <p> When I returned to the dusty classroom on Monday, I showed the professor my code, and the answer for an 8 by 8 board, 92. I got my bonus points and complimentary chocolate, and promptly forgot about the puzzle.</p>
-                <p>That is until five years later, when I took a class on Markov Chains and their applications. For the class project, we had to answer the question "Approximately how many configurations of 1000 queens on a 1000 by 1000 chessboard are there such that none of the queens can attack each other"?</p>
-                <p>Perhaps the word "approximately" should clue you in to why this is an entirely different beast of a problem. But to really grasp the computational difficulty, a complexity analysis is in order.</p>
+                <p>That is until five years later, when I took a class on Markov Chains. For the class project, we had to answer the question "About how many configurations of 1000 queens on a 1000 by 1000 chessboard are there such that none of the queens can attack each other"?</p>
+                <p>Perhaps the word "about" should clue you in to why this is an entirely different beast of a problem. But to really grasp the computational difficulty, look at this graph showing the number of valid configurations for increasing board sizes.</p>
                 <p style="text-align:center"><i>~~WORK IN PROGRESS~~</i></p>
                 <h2>The Markov Chain Monte Carlo Method</h2>
                 <!--
@@ -66,6 +67,8 @@
                 </ul>
                 <p><i>09/04/2023</i></p>
             </section> 
+
+            <p><i>WIP | Last edited 20/04/2023</i></p>
         </article>
     </main>
     <script src="../code/nqueens/chessboard.js"></script>
