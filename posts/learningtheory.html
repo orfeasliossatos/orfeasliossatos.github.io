@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../code/nqueens/chessboard.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Learning Theory</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../author.html">Author</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../news.html">News</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Learning Theory</h1>
+                <hr>
+            </section>
+            
+            <section>
+                
+                <p style="font-style:italic"> Lecture notes for CS-526 Learning Theory 2023, and understanding some theoretical results from the literature.</p>
+                
+                <h2>PAC Learning</h2>
+                <hr>
+                <p>The idea of PAC learning is to describe which hypotheses about a dataset are statistically learnable, in the sense that an algorithm can, with enough data, propose a hypothesis that achieves any accuracy on a labeling task with any probability. Let's work with a particular example to build up some symbols in order to formalize this idea.</p>
+                <p>A common learning task might be to find good weights for a neural network that classifies images of cats and dogs. Typically, you split your data into a training set and a test set to estimate how good the model is at generalizing to new images of cats and dogs.</p>
+                <p><b>Definition</b> (Instance and label domains) Data comes to you from a set \(\mathcal{X}\) and the task is to assign a label from a set \(\mathcal{Y}\). The sample domain is \(\mathcal{X}\times\mathcal{Y}=\mathcal{Z}\)</p>
+                <p>You are presented with a list of samples \(S=\{(z_i)\}_{i=1}^m\) where the samples are drawn from an unknown distribution \(\mathcal{D}\) on \(\mathcal{Z}\). We don't necessarily assume that there is one true label for any particular instance, only that the distribution \(\mathcal{D}\) assigns some probability to a label \(y\)  given an instance \(x\).</p> 
+                <p>$$\mathcal{D}(x,y)=\mathcal{D}(x)\mathcal{D}(y|x)$$</p>
+                <p>The learning task is to find an algorithm \(\mathcal{A}\) that trains on \(\mathcal{S}\) and outputs a hypothesis \(h:\mathcal{X}\rightarrow\mathcal{Y}\) that best fits the data a sense that will be made clear later. If you could choose any hypothesis at all then you will certainly overfit the data you are given. Therefore we typically restrict the hypotheses you can choose from. </p>
+                <p><b>Definition</b> <i>(Hypothesis class)</i> A learner chooses in advance a set of predictors called the <i>hypothesis class</i> \(\mathcal{H}\). Each \(h \in \mathcal{H}\) is a mapping from \(\mathcal{X}\) to \(\mathcal{Y}\).</p>
+                
+                <p>In the case where there are only two possible labels, some authors prefer the following equivalent notion.</p>
+                <p><b>Definition</b> <i>(Concept class)</i> A <i>concept class over</i> \(\mathcal{X}\) is a nonempty set \(\mathcal{C}\subseteq 2^{\mathcal{X}}\).</p>
+                <p>Indeed, an element of the power set \(X\in 2^{\mathcal{X}}\) can be seen as a choice of labels "included" and "not included" on \(\mathcal{X}\). In other words, \( 2^{\mathcal{X}}\) is the set of binary hypotheses.</p>
+                <p><b>Definition</b> <i>(Loss function)</i> In order to measure the quality of a hypothesis, we define a loss function \(l\) that takes a hypothesis \(h\), a particular data point \(x\), and a label \(y\). The loss function outputs a nonnegative real number that measures how close \(h(x)\) is to \(y\).</p>
+                <p>Examples of loss functions include square loss \(l(h, z)=(y-h(x))^2\) and 0-1 loss \(l(h, z)=\mathbb{1}(h(x)\neq y)\).</p>
+                <p>The loss function itself does not measure the quality of the hypothesis. It need not be that the prediction \(h(x)\) be close to any random label \(y\), only that it should pick the label that is most likely to occur under the unknown distribution \(\mathcal{D}\). The best hypothesis minimizes expected loss over the random variable \(Z\sim\mathcal{D}\), which is the so-called true loss \(L_\mathcal{D}\).</p>
+                <p>$$h^*=\argmin_h \mathbb{E}_{Z\sim\mathcal{D}}[l(h,Z)]:=\argmin_h L_\mathcal{D}(h)$$</p>
+                <p>Of course, in reality, \(D\) is unknown, so we employ a proxy called empirical loss \(L_S\), which is nothing other than the average loss over the set \(S\).</p>
+                <p>$$L_S(h)=\frac{1}{m}\sum_{j=1}^m l(h, z_j)$$</p>
+                <p>Finally, we come to the most important definition of Learning theory.</p>
+                <p></p>
+                
+            </section>
+
+            <section>
+                <h2>Sources</h2>
+                <hr>
+                <ul>
+                    <li>[<a href="https://edu.epfl.ch/coursebook/en/learning-theory-CS-526" class="external">link</a>] Rüdiger Urbanke, Nicolas Macris. <i>CS-526 Learning Theory.</i></li>
+                    <li>[<a href="https://web.mit.edu/6.435/www/Valiant84.pdf" class="external">link</a>] Leslie Gabriel Valiant. <i>A Theory of the Learnable.</i></li>
+                    <li>[<a href="https://pdf.sciencedirectassets.com/271538/1-s2.0-S0304397500X0179X/1-s2.0-030439759190026X/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEN3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDECZwQykuScSllNw7WpLoMbQwWHxTmZPkXaSbNZi0xLwIgNwF9qC30mVClmGwb6L%2BySNi9LZvQ7m%2BAY7zOL2AVOuAqsgUIFhAFGgwwNTkwMDM1NDY4NjUiDHhxOb82JlbNP%2Fz%2BmyqPBXOQsWmCtuLGEaBGqy8183vEaYw%2BWSraaRNNtWJ9N15obz6wIuwenc8chOz1kmY%2BV5CytHrVv5xX1njMbfd7D1KDK0z%2FV%2F%2B78DWljE0tpduYt3F8KaR2f2NNgx1rz6D4EKcvIVnM9MuhpSjXlYmGHabWCTZOqPK%2F3pDNaBbugYu8c8S%2BZ0c%2B3V2V5YLPi2ajSktjIkEe0vMDkSprFWSaPS0bKrkSm3yr7ozTmmKvwMPmXnmVEea0rQVibjTtm09jRTaRjNvRC9pPF2HFVqyJRdIepjiRX9YJIzesAxByeDCX4WfdSFOZsrv0eE%2FFhaybPzNCr9VtzfkmyvExteNl5%2BZ%2F66hZbkeL9ru4EcOUWYSCYVHZuhNdxRuGgnXbG%2BMy%2B57eawbMN1iwVdyofyz6fPwVemehVNpCCbm0Bat4VSLNjuS92QJ8GvFhlg4z8KXtp2MGof4VspUwnpQxhb0esSZ3l518hhgqkHCFfb330L3P9eGGRcChPjSFXCXkhbUXC3NsiVilryG06Ntg9h13A12yNjP8mgzTtjI44%2BFf1dUvB6E%2FBT2bNgBekJErT57uCmhFJDJyqKa9csSA5ndNuPE%2BwCAKgjqhEZH36TI%2FgmHJ1uO0s2YBr1d%2BnCB4rWNSlfqt5w3%2BgGJ2fWNO%2FXTRviidn%2F3QzF04Z%2BtHSstbM%2Fm2L7a5osJ39CfS%2FfIehFdDHvIMQZ24ofbJMlDZcaAYBfoqv4iR4qYVHk6BJw0VBzgLMRg0vxKsX2%2FRiL1EF%2FNT%2FsIXqUutTVy3WNVUCDcJi3STNPSrg4wfq0uhyLsZ6RRakjz9mu9hIdJ%2BEu9okcj4bxKRE3IsruEFpJYymZbJcnQmr8GwnH6IPZKh7H%2BTJFgw3q29owY6sQHZ2Gq4CNQzedZgflW27T4S%2FmRAezsoe9koAQXhvVgQ7hq3MEuXBOpnCF6TlnJRRYMpQkgeWZf%2Bzt1c11ECYlKFR4wpJoRCGCcPubrVYnZv8ExDxc8g%2BOpjg%2BjNf3u%2BuLlZtg8vxSxD4HJILudZE%2FyGqkAI9kjwjEOrQjgVYHGLcJ9IQSOXn8i8%2FdxpDJGZpv1OKY7JbFw0KV9zbhqTeQxvMMZ5YlRR46pbSmzC%2BCSf%2Bag%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230525T141615Z&X-Amz-SignedHeaders=host&X-Amz-Expires=299&X-Amz-Credential=ASIAQ3PHCVTYXVVBSJXN%2F20230525%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=0871811b8dd9ccdbf1b825206a1808e45bda86145df276778a7fe02cb53eb4fb&hash=586b6a79f0e32374ec871cae84255043844807edb7015b77621eeba0b3a5dc1b&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=030439759190026X&tid=spdf-426ef011-a87a-445b-8d03-8c494c37a7d9&sid=0740a9427929d648601a32899919c683aaf8gxrqb&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=05065103040254515051&rr=7cce6524ee083b63&cc=ch" class="external">link</a>] Gyora.M. Benedek & Alon Itai. <i>Learnability with respect to fixed distributions.</i></li>
+                    <li>[<a href="https://arxiv.org/pdf/2010.08515.pdf" class="external">link</a>] Zhiyuan Li, Yi Zhang & Sanjeev Arora <i>Why are convolutional nets more sample-efficient than fully-connected nets?</i></li>
+                </ul>
+            </section> 
+
+            <p><i>WIP | Last edited 04/06/2023</i></p>
+        </article>
+    </main>
+</body>
+</html>
