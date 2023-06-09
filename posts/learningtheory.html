@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../code/nqueens/chessboard.css">
-    
+    <link rel="stylesheet" href="../css/math.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
     <!-- LaTeX macros-->
@@ -41,10 +40,9 @@
                 <h2>Learning Theory</h2>
                 <hr>
                 <h3>1. PAC Learning</h3>
-                <p>The idea of PAC learning is to describe which hypotheses about a dataset are statistically learnable, in the sense that an algorithm can, with enough data, propose a hypothesis that achieves any accuracy on a labeling task with any probability. Let's work with a particular example to build up some symbols in order to formalize this idea.</p>
-                <p>A common learning task might be to find good weights for a neural network that classifies images of cats and dogs. Typically, you split your data into a training set and a test set to estimate how good the model is at generalizing to new images of cats and dogs.</p>
+                <p>The idea of PAC learning is to describe which hypotheses about a dataset are statistically learnable, in the sense that an algorithm can, with enough data, propose a hypothesis that achieves any accuracy on a labeling task with any probability.</p>
                 <p><b>Definition</b> (Instance and label domains) Data comes to you from a set \(\mathcal{X}\) and the task is to assign a label from a set \(\mathcal{Y}\). The sample set is \(\mathcal{X}\times\mathcal{Y}=\mathcal{Z}\)</p>
-                <p>You are presented with a list of samples \(S=\{(z_i)\}_{i=1}^m\) where the samples are drawn from an unknown distribution \(\mathcal{D}\) on \(\mathcal{Z}\). We don't necessarily assume that there is one true label for any particular instance, only that the distribution \(\mathcal{D}\) assigns some probability to a label \(y\)  given an instance \(x\).</p> 
+                <p>You are presented with a list of samples \(S=\{(z_i)\}_{i=1}^m\) where the samples are drawn independently and identically from unknown distribution \(\mathcal{D}\) on \(\mathcal{Z}\). We denote this relationship as \(S\sim\mathcal{D}^m\). We don't necessarily assume that there is one true label for any particular instance, only that the distribution \(\mathcal{D}\) assigns some probability to a label \(y\)  given an instance \(x\).</p> 
                 <p>$$\mathcal{D}(x,y)=\mathcal{D}(x)\mathcal{D}(y|x)$$</p>
                 <p>The learning task is to find an algorithm \(\mathcal{A}\) that trains on \(\mathcal{S}\) and outputs a hypothesis that best fits the data in the sense that it picks the most likely labels. If you could choose any hypothesis at all then you will certainly overfit the data you are given. Therefore we typically restrict the hypotheses you can choose from. </p>
                 <p><b>Definition</b> <i>(Hypothesis class)</i> A learner chooses in advance a set of predictors called the <i>hypothesis class</i> \(\mathcal{H}\). In the deterministic setting, \(h \in \mathcal{H}\) is a mapping from \(\mathcal{X}\) to \(\mathcal{Y}\). In the non-deterministic setting, \(h\) maps \(\mathcal{X}\) to the set of all label set distributions  \(\Delta\mathcal{Y}\).</p>
@@ -56,17 +54,95 @@
                 <p>Examples of loss functions include square loss \(l(h, z)=(y-h(x))^2\) and 0-1 loss \(l(h, z)=\mathbb{1}(h(x)\neq y)\).</p>
                 <p>The loss function itself does not measure the quality of the hypothesis. It need not be that the prediction \(h(x)\) be close to any random label \(y\), only that it should pick the label that is most likely to occur under the unknown distribution \(\mathcal{D}\). The best hypothesis minimizes expected loss over the random variable \(Z\sim\mathcal{D}\), which is the so-called true loss \(L_\mathcal{D}\).</p>
                 <p>$$h^*=\argmin_{h\in\mathcal{H}} \mathbb{E}_{Z\sim\mathcal{D}}[l(h,Z)]:=\argmin_{h\in\mathcal{H}} L_\mathcal{D}(h)$$</p>
-                <p>Of course, in reality, \(D\) is unknown, so we employ a proxy called empirical loss \(L_S\), which is nothing other than the average loss over the set \(S\).</p>
+                <p>We call \(h^*\) the Bayes-optimal predictor, and is described in more detail in exercise (?). Of course, in reality, \(D\) is unknown, so we employ a proxy called empirical loss \(L_S\), which is nothing other than the average loss over the set \(S\).</p>
                 <p>$$L_S(h)=\frac{1}{m}\sum_{j=1}^m l(h, z_j)$$</p>
                 <p>Finally, we come to the most important definition of Learning theory, which formalizes what it means for a hypothesis class to be learnable. In this setting, the algorithm \(\mathcal{A}\) and hypothesis class \(\mathcal{H}\) are both deterministic.</p>
-                <p><b>Definition</b> <i>(PAC-learnable)</i> A hypothesis class \(\mathcal{H}\) is probably-approximately-correct (PAC) learnable with respect to a sample set \(\mathcal{Z}\) and a loss function \(l\) iff there exist an algorithm \(\mathcal{A}\) and a minimum sample size function \(m_\mathcal{H}:]0,1[^2\rightarrow\mathbb{N}\) such that for every \(\epsilon, \delta\in]0,1[^2\), and any distribution \(\mathcal{D}\) on \(\mathcal{Z}\), the true loss of the hypothesis \(\mathcal{A(S)}\) is within a tolerance \(\epsilon\) of the true loss of the best hypothesis, with probability at least \(1-\delta\).</p>
+                <p><b>Definition</b> <i>(PAC learnable)</i> A hypothesis class \(\mathcal{H}\) is probably-approximately-correct (PAC) learnable with respect to a sample set \(\mathcal{Z}\) and a loss function \(l\) iff there exist an algorithm \(\mathcal{A}\) and a minimum sample size function \(m_\mathcal{H}:]0,1[^2\rightarrow\mathbb{N}\) such that for every \(\epsilon, \delta\in]0,1[^2\), and any distribution \(\mathcal{D}\) on \(\mathcal{Z}\), the true loss of the hypothesis \(\mathcal{A(S)}\), where \(S\sim\mathcal{D}^m\), is within a tolerance \(\epsilon\) of the true loss of the best hypothesis, with probability at least \(1-\delta\), for every \(m\geq m_\mathcal{H}(\epsilon,\delta)\).</p>
                 <p>$$\mathbb{P}_S\{L_\mathcal{D}(A(S))\leq L_\mathcal{D}(h^*)+\epsilon\}\geq 1-\delta$$</p>
                 <p>In plain English, this means that if you fix your architecture, loss function, and dataset, then we say the architecture is learnable if there is some amount of training data and an algorithm that would output a model that achieves a score arbitrarily close to the best model's score with arbitrary probability.</p>
                 <p>In binary classification, if the two classes can be cleanly separated by a straight line, then that line achieves a true loss of zero. This is the realizability assumption.</p>
-                <p><b>Definition</b> <i>(Agnostic / Realizable)</i> The realizability assumption, as opposed to agnostic learning, is that there there indeed exists a hypothesis in the hypothesis class that achieves a true loss of zero.</p>
-                
-                <p>The size of the hypothesis class is important for whether or not it is PAC-learnable. For example, the hypothesis class with one hypothesis \(\mathcal{H}=\{h_0\}\) is trivially PAC-learnable. We will see that finite classes are always PAC learnable, whereas the situation is more complicated for infinite classes.</p>
-                <h3>2. Learning finite hypothesis classes by Expected Risk Minimization and Uniform Convergence</h3>
+                <p><b>Definition</b> <i>(Agnostic / Realizable)</i> The realizability assumption, as opposed to agnostic learning, is that there there indeed exists a hypothesis in \(\mathcal{H}\) that achieves a true loss of zero.</p>
+                <p>The size of the hypothesis class is important for whether or not it is PAC learnable. For example, the hypothesis class with one hypothesis \(\mathcal{H}=\{h_0\}\) is trivially PAC learnable. We will see that finite classes are always PAC learnable, whereas the situation is more complicated for infinite classes.</p>
+                <p><b>Exercise 1.1</b> <i>(Monotonicity of Sample Complexity) [Schwartz, David]</i> Let \(\mathcal{H}\) be a hypothesis class for a binary classification task. Suppose that \(\mathcal{H}\) is PAC learnable and its sample complexity is given by \(m_\mathcal{H}(\cdot,\cdot)\). (i) Show that \(m_\mathcal{H}\) is monotonically nonincreasing in each of its parameters. That is, show that given \(\delta\in]0,1[\), and given \(0< \epsilon_1\leq\epsilon_2< 1\), we have that \(m_\mathcal{H}(\epsilon_1,\delta)\geq m_\mathcal{H}(\epsilon_2,\delta)\). (ii) Similarly, show that given \(\epsilon\in]0,1[\), and given \(0< \delta_1\leq\delta_2< 1\), we have that  \(m_\mathcal{H}(\epsilon,\delta_1)\geq m_\mathcal{H}(\epsilon,\delta_2)\).</p>
+                <span id="sol1_1" onclick="toggleParagraph('sol1_1')" class="solution">
+                    <p>Show solution</p>
+                    <p class="hidden"> (i) If \(\mathcal{H}\) is PAC-learnable then 
+                        $$\mathbb{P}_S\{L_\mathcal{D}(A(S))\leq L_\mathcal{D}(h^*)+\epsilon_1\}\geq 1-\delta$$ 
+                        for all \(m\geq m_\mathcal{H}(\epsilon_1,\delta)\). If we increase the tolerance to \(\epsilon_2\geq\epsilon_1\) then the probability increases still, and we still have 
+                        $$\mathbb{P}_S\{L_\mathcal{D}(A(S))\leq L_\mathcal{D}(h^*)+\epsilon_2\}\geq 1-\delta,$$
+                        again for all \(m\geq m_\mathcal{H}(\epsilon_2,\delta)\). Skipping the intermediary implication, we find
+                        $$m\geq m_\mathcal{H}(\epsilon_1,\delta)\Rightarrow m\geq m_\mathcal{H}(\epsilon_2,\delta).$$
+                        Which must mean that \(m_\mathcal{H}(\epsilon_2,\delta)\) is smaller than \(m_\mathcal{H}(\epsilon_1,\delta)\).
+                    </p>
+                    <p class="hidden"> (ii) If \(\mathcal{H}\) is PAC-learnable then 
+                        $$\mathbb{P}_S\{L_\mathcal{D}(A(S))\leq L_\mathcal{D}(h^*)+\epsilon\}\geq 1-\delta_1$$ 
+                        for all \(m\geq m_\mathcal{H}(\epsilon,\delta_1)\). If we decrease \(1-\delta_1 \geq 1-\delta_2\) then 
+                        $$\mathbb{P}_S\{L_\mathcal{D}(A(S))\leq L_\mathcal{D}(h^*)+\epsilon\}\geq 1-\delta_2,$$
+                        again for all \(m\geq m_\mathcal{H}(\epsilon,\delta_2)\). Skipping the intermediary implication, we find
+                        $$m\geq m_\mathcal{H}(\epsilon,\delta_1)\Rightarrow m\geq m_\mathcal{H}(\epsilon,\delta_2).$$
+                        Which must mean that \(m_\mathcal{H}(\epsilon,\delta_1)\) is smaller than \(m_\mathcal{H}(\epsilon,\delta_2)\).
+                    </p>
+                </span>
+
+                <h3>2. Finite Hypothesis Classes & Uniform Convergence</h3>
+                <p>We mentioned that since \(\mathcal{D}\) is unknown, we employ the empirical loss \(L_S\) as a proxy measure of the quality of a hypothesis. An algorithm that minimizes this quantity over \(\mathcal{H}\) is an Expected Risk Minimization (\(ERM_\mathcal{H}\)) algorithm.</p>
+                <p><b>Definition</b> <i>(Expected risk minimizer)</i> Denote the result of an \(ERM_\mathcal{H}\) algorithm with respect to a hypothesis class \(\mathcal{H}\) and a training set \(S\) as \(h_S:=ERM_\mathcal{H}(S):=\argmin_{h\in\mathcal{H}}L_S(h)\). </p>
+                <p>We are going to work towards a corollary that says that any finite \(\mathcal{H}\) is agnostic PAC learnable with respected to a bounded loss function with sample complexity \(\lceil\frac{1}{2\epsilon^2}\log(\frac{2|\mathcal{H}|}{\delta})\rceil\). We won't construct a specific algorithm that learns any finite \(\mathcal{H}\), but we will show that as long as the algorithm is an expected risk minimizer then the result follows. </p>
+                <p>But first, note the difference between \(h_S\) and \(h^*\). If it so happens that \(S\) is unrepresentative of the distribution \(\mathcal{D}\) as a whole, it may be that \(h_S\) is completely different from \(h^*\). We therefore introduce the notion of a \(\epsilon\)-representative sample \(S\).</p>
+                <p><b>Definition</b> <i>(\(\epsilon\)-representative)</i> We say that \(S\) is \(\epsilon\)-representative iff 
+                    $$\forall h \in \mathcal{H}, |L_S(h)-L_\mathcal{D}(h)|\leq\epsilon.$$</p>
+
+                <p>This definition is closely related to the tolerance inequality found in the definition of PAC learning, except that we fix the algorithm \(\mathcal{A}=ERM_\mathcal{H}\) beforehand. Indeed, we can show the following lemma.</p>
+                <p><b>Lemma</b> If \(S\) is \(\epsilon / 2\)-representative, then \(L_\mathcal{D}(h_S)\leq L_\mathcal{D}(h^*)+\epsilon\)</p>
+                <span id="proof1" onclick="toggleParagraph('proof1')" class="solution">
+                    <p>Show proof</p>
+                    <p class="hidden"> 
+                        <b>Proof.</b> \(S\) is \(\epsilon/ 2\) -representative means that for any \(h\in\mathcal{H}\),
+                        \begin{align}
+                        &-\frac{\epsilon}{2} \leq L_S(h)-L_\mathcal{D}(h)\leq\frac{\epsilon}{2} \\
+                        &\Rightarrow \left\{ \begin{array}{l} L_S(h)\leq L_\mathcal{D}(h)+\frac{\epsilon}{2} &\\ L_\mathcal{D}(h)\leq L_S(h)+\frac{\epsilon}{2} \end{array} \right.
+                        \end{align}
+                        So we have the following chain of inequalities,
+                        $$L_\mathcal{D}(h_S)\leq L_S(h_S)+\frac{\epsilon}{2}\leq L_S(h)+\frac{\epsilon}{2}\leq L_\mathcal{D}(h)+\frac{\epsilon}{2},$$
+                        and since the inequality holds for any particular \(h\in\mathcal{H}\), we can just pick \(h^*\), so
+                        $$L_\mathcal{D}(h_S)\leq L_\mathcal{D}(h^*)+\epsilon.$$
+                    </p>
+                </span>
+                <p>In fact, once we know that we want to perform expected risk minimization, there's a nice property of some hypothesis classes that you can always increase the sample size until it is \(\epsilon\)-representative of \(\mathcal{H}\) with probability at least \(1-\delta\).</p>
+                <p><b>Definition</b> <i>(Uniform convergence property)</i> \(\mathcal{H}\) has the UC property with respect to a sample set \(\mathcal{Z}\) and loss function \(l\) iff \(\exists m_\mathcal{H}^{UC}:]0,1[^2\rightarrow\mathbb{N}\) such that \(\forall\epsilon,\delta\in]0,1[\) and \(\forall \mathcal{D}\) over \(\mathcal{Z}\), any \(S\sim\mathcal{D}^m\) with \(m\geq m_\mathcal{H}^{UC}(\epsilon,\delta)\) is \(\epsilon\)-representative with probability greater than \(1-\delta\).
+                    $$\mathbb{P}_S\{\forall h \in \mathcal{H}, |L_S(h)-L_\mathcal{D}(h)|\leq\epsilon\}\geq 1-\delta$$
+                </p>
+                <p>What's suprising is that any finite hypothesis class has the UC property as long as \(l\) is bounded. Here's the lemma and proof.</p>
+                <p><b>Lemma</b> If \(|\mathcal{H}|<\infty\) and \(\forall h\in\mathcal{H}, z\in\mathcal{Z}\), the loss function is bounded as \(a\leq l(h, z) \leq b\), then \(\mathcal{H}\) has the uniform convergence property.</p>
+                <span id="proof2" onclick="toggleParagraph('proof2')" class="solution">
+                    <p>Show proof</p>
+                    <p class="hidden"> 
+                        <b>Proof.</b> Since \(L_S(h)\) is proportional a sum of \(m\) bounded random variables, we can use Höeffding's inequality to make the sample size appear in an upper bound.
+                        \begin{align}
+                        &\mathbb{P}_S\{\exists h \in \mathcal{H}, |L_S(h)-L_\mathcal{D}(h)|>\epsilon\}\\
+                        &=\mathbb{P}_S\{\bigcup_{h \in \mathcal{H}} |L_S(h)-L_\mathcal{D}(h)|>\epsilon\}\\
+                        &\leq \sum_{h \in \mathcal{H}}\mathbb{P}_S\{|L_S(h)-L_\mathcal{D}(h)|>\epsilon\}\\
+                        &\leq \sum_{h \in \mathcal{H}}\mathbb{P}_S\{|\sum_{j=1}^m l(h, z_j)-mL_\mathcal{D}(h)|>m\epsilon\}\\
+                        &\leq \sum_{h \in \mathcal{H}} 2e^\frac{-2m^2\epsilon^2}{m(b-a)}\\
+                        &=2|\mathcal{H}|e^\frac{-2m\epsilon^2}{(b-a)}
+                        \end{align}
+                        Now we want to express \(m\) in terms of \(\epsilon\) and \(\delta\) such that the above quantity is less than \(\delta\).
+                        \begin{align}
+                        &2|\mathcal{H}|e^\frac{-2m\epsilon^2}{(b-a)}\leq\delta\\
+                        &\Leftrightarrow \frac{-2m\epsilon^2}{(b-a)}\leq\log{\frac{\delta}{2|\mathcal{H}|}}\\
+                        &\Leftrightarrow m\geq\frac{(b-a)}{2\epsilon^2}\log{\frac{2|\mathcal{H}|}{\delta}}
+                        \end{align}
+                        Now we are done, as we have found an appropriate expression for \(m_\mathcal{H}^{UC}(\epsilon,\delta)\).
+                    </p>
+                </span>
+                <p>And the main result follows naturally from the UC property and choosing 0-1 loss.</p>
+                <p><b>Corollary</b> <i>(Finite classes are PAC learnable)</i> If \(\mathcal{H}\) is finite, then it is agnostic PAC-learnable with respect any sample set and 0-1 loss, thanks to the ERM rule and sample complexity \(m_\mathcal{H}(\epsilon, \delta)=\frac{1}{2\epsilon^2}\log{\frac{2|\mathcal{H}|}{\delta}}\). </p>
+                <span id="proof3" onclick="toggleParagraph('proof3')" class="solution">
+                    <p>Show proof</p>
+                    <p class="hidden"> 
+                        <b>Proof.</b> From a previous lemma, we know that if \(S\) is \(\epsilon / 2\)-representative, then \(L_\mathcal{D}(h_S)\leq L_\mathcal{D}(h^*)+\epsilon\).
+                    </p>
+                </span>
                 <h2>Tensor Decomposition</h2>
             </section>
 
@@ -75,14 +151,17 @@
                 <hr>
                 <ul>
                     <li>[<a href="https://edu.epfl.ch/coursebook/en/learning-theory-CS-526" class="external">link</a>] Rüdiger Urbanke, Nicolas Macris. <i>CS-526 Learning Theory.</i></li>
+                    <li>[<a href="https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/copy.html" class="external">link</a>] Shai Shalev-Shwartz, Shai Ben-David. <i>Understanding Machine Learning: From Theory to Algorithms</i></li>
                     <li>[<a href="https://web.mit.edu/6.435/www/Valiant84.pdf" class="external">link</a>] Leslie Gabriel Valiant. <i>A Theory of the Learnable.</i></li>
                     <li>[<a href="https://pdf.sciencedirectassets.com/271538/1-s2.0-S0304397500X0179X/1-s2.0-030439759190026X/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEN3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQDECZwQykuScSllNw7WpLoMbQwWHxTmZPkXaSbNZi0xLwIgNwF9qC30mVClmGwb6L%2BySNi9LZvQ7m%2BAY7zOL2AVOuAqsgUIFhAFGgwwNTkwMDM1NDY4NjUiDHhxOb82JlbNP%2Fz%2BmyqPBXOQsWmCtuLGEaBGqy8183vEaYw%2BWSraaRNNtWJ9N15obz6wIuwenc8chOz1kmY%2BV5CytHrVv5xX1njMbfd7D1KDK0z%2FV%2F%2B78DWljE0tpduYt3F8KaR2f2NNgx1rz6D4EKcvIVnM9MuhpSjXlYmGHabWCTZOqPK%2F3pDNaBbugYu8c8S%2BZ0c%2B3V2V5YLPi2ajSktjIkEe0vMDkSprFWSaPS0bKrkSm3yr7ozTmmKvwMPmXnmVEea0rQVibjTtm09jRTaRjNvRC9pPF2HFVqyJRdIepjiRX9YJIzesAxByeDCX4WfdSFOZsrv0eE%2FFhaybPzNCr9VtzfkmyvExteNl5%2BZ%2F66hZbkeL9ru4EcOUWYSCYVHZuhNdxRuGgnXbG%2BMy%2B57eawbMN1iwVdyofyz6fPwVemehVNpCCbm0Bat4VSLNjuS92QJ8GvFhlg4z8KXtp2MGof4VspUwnpQxhb0esSZ3l518hhgqkHCFfb330L3P9eGGRcChPjSFXCXkhbUXC3NsiVilryG06Ntg9h13A12yNjP8mgzTtjI44%2BFf1dUvB6E%2FBT2bNgBekJErT57uCmhFJDJyqKa9csSA5ndNuPE%2BwCAKgjqhEZH36TI%2FgmHJ1uO0s2YBr1d%2BnCB4rWNSlfqt5w3%2BgGJ2fWNO%2FXTRviidn%2F3QzF04Z%2BtHSstbM%2Fm2L7a5osJ39CfS%2FfIehFdDHvIMQZ24ofbJMlDZcaAYBfoqv4iR4qYVHk6BJw0VBzgLMRg0vxKsX2%2FRiL1EF%2FNT%2FsIXqUutTVy3WNVUCDcJi3STNPSrg4wfq0uhyLsZ6RRakjz9mu9hIdJ%2BEu9okcj4bxKRE3IsruEFpJYymZbJcnQmr8GwnH6IPZKh7H%2BTJFgw3q29owY6sQHZ2Gq4CNQzedZgflW27T4S%2FmRAezsoe9koAQXhvVgQ7hq3MEuXBOpnCF6TlnJRRYMpQkgeWZf%2Bzt1c11ECYlKFR4wpJoRCGCcPubrVYnZv8ExDxc8g%2BOpjg%2BjNf3u%2BuLlZtg8vxSxD4HJILudZE%2FyGqkAI9kjwjEOrQjgVYHGLcJ9IQSOXn8i8%2FdxpDJGZpv1OKY7JbFw0KV9zbhqTeQxvMMZ5YlRR46pbSmzC%2BCSf%2Bag%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20230525T141615Z&X-Amz-SignedHeaders=host&X-Amz-Expires=299&X-Amz-Credential=ASIAQ3PHCVTYXVVBSJXN%2F20230525%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=0871811b8dd9ccdbf1b825206a1808e45bda86145df276778a7fe02cb53eb4fb&hash=586b6a79f0e32374ec871cae84255043844807edb7015b77621eeba0b3a5dc1b&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=030439759190026X&tid=spdf-426ef011-a87a-445b-8d03-8c494c37a7d9&sid=0740a9427929d648601a32899919c683aaf8gxrqb&type=client&tsoh=d3d3LnNjaWVuY2VkaXJlY3QuY29t&ua=05065103040254515051&rr=7cce6524ee083b63&cc=ch" class="external">link</a>] Gyora.M. Benedek & Alon Itai. <i>Learnability with respect to fixed distributions.</i></li>
                     <li>[<a href="https://arxiv.org/pdf/2010.08515.pdf" class="external">link</a>] Zhiyuan Li, Yi Zhang & Sanjeev Arora <i>Why are convolutional nets more sample-efficient than fully-connected nets?</i></li>
+                    
                 </ul>
             </section> 
 
             <p><i>WIP | Last edited 04/06/2023</i></p>
         </article>
     </main>
+    <script src="../code/common.js"></script>
 </body>
 </html>
