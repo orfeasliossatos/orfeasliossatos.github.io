@@ -85,9 +85,9 @@
                 </span>
 
                 <h3>2. Finite Hypothesis Classes & Uniform Convergence</h3>
-                <p>We mentioned that since \(\mathcal{D}\) is unknown, we employ the empirical loss \(L_S\) as a proxy measure of the quality of a hypothesis. An algorithm that minimizes this quantity over \(\mathcal{H}\) is an Expected Risk Minimization (\(ERM_\mathcal{H}\)) algorithm.</p>
+                <p>By the end of this section, we'll have a way to roughly estimate the number of training samples you need to get a model that's as accurate as you like. We mentioned that since \(\mathcal{D}\) is unknown, we employ the empirical loss \(L_S\) as a proxy measure of the quality of a hypothesis. An algorithm that minimizes this quantity over \(\mathcal{H}\) is an Expected Risk Minimization (\(ERM_\mathcal{H}\)) algorithm.</p>
                 <p><b>Definition</b> <i>(Expected risk minimizer)</i> Denote the result of an \(ERM_\mathcal{H}\) algorithm with respect to a hypothesis class \(\mathcal{H}\) and a training set \(S\) as \(h_S:=ERM_\mathcal{H}(S):=\argmin_{h\in\mathcal{H}}L_S(h)\). </p>
-                <p>We are going to work towards a corollary that says that any finite \(\mathcal{H}\) is agnostic PAC learnable with respected to a bounded loss function with sample complexity \(\lceil\frac{1}{2\epsilon^2}\log(\frac{2|\mathcal{H}|}{\delta})\rceil\). We won't construct a specific algorithm that learns any finite \(\mathcal{H}\), but we will show that as long as the algorithm is an expected risk minimizer then the result follows. </p>
+                <p>We are going to work towards a corollary that says that any finite \(\mathcal{H}\) is agnostic PAC learnable with respected to a bounded loss function with sample complexity \(\lceil\frac{1}{2\epsilon^2}\ln(\frac{2|\mathcal{H}|}{\delta})\rceil\). We won't construct a specific algorithm that learns any finite \(\mathcal{H}\), but we will show that as long as the algorithm is an expected risk minimizer then the result follows. </p>
                 <p>But first, note the difference between \(h_S\) and \(h^*\). If it so happens that \(S\) is unrepresentative of the distribution \(\mathcal{D}\) as a whole, it may be that \(h_S\) is completely different from \(h^*\). We therefore introduce the notion of a \(\epsilon\)-representative sample \(S\).</p>
                 <p><b>Definition</b> <i>(\(\epsilon\)-representative)</i> We say that \(S\) is \(\epsilon\)-representative iff 
                     $$\forall h \in \mathcal{H}, |L_S(h)-L_\mathcal{D}(h)|\leq\epsilon.$$</p>
@@ -129,20 +129,29 @@
                         Now we want to express \(m\) in terms of \(\epsilon\) and \(\delta\) such that the above quantity is less than \(\delta\).
                         \begin{align}
                         &2|\mathcal{H}|e^\frac{-2m\epsilon^2}{(b-a)}\leq\delta\\
-                        &\Leftrightarrow \frac{-2m\epsilon^2}{(b-a)}\leq\log{\frac{\delta}{2|\mathcal{H}|}}\\
-                        &\Leftrightarrow m\geq\frac{(b-a)}{2\epsilon^2}\log{\frac{2|\mathcal{H}|}{\delta}}
+                        &\Leftrightarrow \frac{-2m\epsilon^2}{(b-a)}\leq\ln{\frac{\delta}{2|\mathcal{H}|}}\\
+                        &\Leftrightarrow m\geq\frac{(b-a)}{2\epsilon^2}\ln{\frac{2|\mathcal{H}|}{\delta}}
                         \end{align}
                         Now we are done, as we have found an appropriate expression for \(m_\mathcal{H}^{UC}(\epsilon,\delta)\).
                     </p>
                 </span>
                 <p>And the main result follows naturally from the UC property and choosing 0-1 loss.</p>
-                <p><b>Corollary</b> <i>(Finite classes are PAC learnable)</i> If \(\mathcal{H}\) is finite, then it is agnostic PAC-learnable with respect any sample set and 0-1 loss, thanks to the ERM rule and sample complexity \(m_\mathcal{H}(\epsilon, \delta)=\frac{1}{2\epsilon^2}\log{\frac{2|\mathcal{H}|}{\delta}}\). </p>
+                <p><b>Corollary</b> <i>(Finite classes are PAC learnable)</i> If \(\mathcal{H}\) is finite, then it is agnostic PAC-learnable with respect to any sample set and 0-1 loss, thanks to the ERM rule and sample complexity \(m_\mathcal{H}(\epsilon, \delta)=\frac{1}{2\epsilon^2}\ln{\frac{2|\mathcal{H}|}{\delta}}\). </p>
                 <span id="proof3" onclick="toggleParagraph('proof3')" class="solution">
                     <p>Show proof</p>
                     <p class="hidden"> 
-                        <b>Proof.</b> From a previous lemma, we know that if \(S\) is \(\epsilon / 2\)-representative, then \(L_\mathcal{D}(h_S)\leq L_\mathcal{D}(h^*)+\epsilon\).
+                        <b>Proof.</b> We know that if \(S\) is \(\epsilon / 2\)-representative, then \(L_\mathcal{D}(ERM_\mathcal{H}(S))\leq L_\mathcal{D}(h^*)+\epsilon\), so by taking probabilities over the randomness of \(S\sim\mathcal{D}^m\), we have
+                        \begin{align}
+                        &\mathbb{P}_S\{L_\mathcal{D}(ERM_\mathcal{H}(S))\leq L_\mathcal{D}(h^*)+\epsilon\}\\
+                        &\geq\mathbb{P}_S\{\forall h \in \mathcal{H}, |L_S(h)-L_\mathcal{D}(h)|\leq\epsilon\}
+                        \end{align}
+                        And now from the previous lemma, we know that finite \(\mathcal{H}\) has the uniform convergence property with the given sample complexity, so
+                        \(\mathbb{P}_S\{L_\mathcal{D}(ERM_\mathcal{H}(S))\leq L_\mathcal{D}(h^*)+\epsilon\}\geq 1-\delta\)
+                        as required.
                     </p>
                 </span>
+                <p>So how good is this prediction for number of samples you need for a required performance? Say for example we are working with LeNet on the MNIST dataset with a 0-1 loss function, so \(\epsilon\) represents difference in accuracy from the best possible network. Since LeNet's weights are real numbers, in practice they are represented with 64 bits.</p>
+                <i>WIP</i>
                 <h2>Tensor Decomposition</h2>
             </section>
 
