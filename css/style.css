@@ -72,7 +72,7 @@ h3 {
     margin-block-end: 1rem;   
 }
 
-ul {
+ul,ol {
     padding-left: 2rem;
 }
 
