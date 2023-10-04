@@ -374,6 +374,16 @@ input {
     border-bottom: 2px solid var(--body-color);
 }
 
+#classtree {
+    grid-template-columns: repeat(2, 1fr);
+}
+  
+#classtree .grid-item:nth-child(-n+2) {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid var(--body-color);
+}
+
 #abacuslist {
     grid-template-columns: repeat(2, 1fr);
 }
