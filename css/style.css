@@ -49,6 +49,10 @@ p {
     margin-block-end: 1em;
 }
 
+.poem {
+    text-align: center;
+}
+
 article {
     display: block;
 }
@@ -109,6 +113,16 @@ ul,ol {
     padding: 1rem;
     margin: 1rem;
     
+}
+
+.bordered {
+    border: 1px solid var(--body-color);
+    outline: 1px solid var(--body-color);
+    outline-offset: 5px;
+    outline-style: dashed;
+    box-shadow: -10px 10px var(--body-color);
+    margin: auto;
+    display:grid;
 }
 
 .card {
@@ -516,5 +530,4 @@ input {
         float:right;
     }
 
-    
 }
