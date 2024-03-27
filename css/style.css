@@ -41,6 +41,10 @@ div {
     
 }
 
+.spacer {
+    padding-top: 2rem;
+}
+
 p {
     letter-spacing: 0.02rem;
     word-spacing: 0.08rem;
