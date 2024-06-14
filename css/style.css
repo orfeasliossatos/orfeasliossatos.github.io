@@ -427,8 +427,8 @@ input {
 
 #pfp {
     display: block;
-    float: left;
-    margin: 1rem;
+    float: right;
+    margin: 2rem;
     padding: 1.5%;
     max-width: 200px;
 }
