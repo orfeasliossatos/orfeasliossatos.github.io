@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Spectral Animation Compression</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Spectral Animation Compression</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <p style="font-style:italic">Minimalistic research notes on an experiment in lossy animation compression.</p>
+            </section>
+            
+            <section>
+                <h2>Motivation</h2>
+                <hr>
+                <p>I think about motion data compression a lot, it was one of the big topics of my internship at Ubisoft.</p>
+
+                <p>I learned many methods of compressing motion data. A lot of it comes down to bit tricks since animation tracks are mostly empty of constant except for the quaternion tracks.</p>
+
+                <p>These quaternion tracks make up most of the interesting content, but it is not obvious whether a mathematically rigourous treatment of the signal would enable fast decompression and streaming.</p>
+
+                <p>This is the question I explore in this post.</p>
+            </section>
+
+            <section>
+                <h2>Background</h2>
+                <hr>
+                <p>The point is that we need the equivalent of a frequency for elements of \(SO(3)\). I know that for locally compact Abelian groups there exists the Pontryagin dual, which generalises the Fourier transform, but quaternions are not Abelian.</p>
+                <p>I have seen papers around that claim a well-defined quaternion Fourier transform, but I cannot judge whether it makes mathematical sense. I have also seen the words "representation theory" used in the same context as Fourier transforms, so I will definitely look into spherical harmonics.</p>
+                <p>Finally, another question is how to actually interpret the amplitudes, frequences and phases of the basis functions. It would be nice for them to simply correspond to something like angular velocity around an axis but it is not so clear to me why that should be the case.</p>
+                <p>This is important because we may decide to perform some kind of band-limiting or perform a psycho-perceptual frequency masking to get better compression ratios. So it would be nice to be able to have some intuition about which frequences to mask.</p>
+                
+            </section>
+
+            <section>
+                <h2>Further Questions</h2>
+                <hr>
+                <p>A user on Hacker News remarked that audio compression has dedicated hardware support. The question arises, could the hardware be hijacked for motion data? </p>
+
+                </section>
+
+            <section>
+                <h2>Research Notes</h2>
+                <hr>
+                <p>(24/11/2024)</p>
+                <ul>
+                    <li>Illustrated a proof of the Cartan-Dieudonné theorem.</li>
+                </ul>
+                <p>(23/11/2024) </p>
+            
+                <ul>
+                    <li>Implemented a Quaternion class.</li>
+                    <li>Performed some basic testing with the unittest framework.</li>
+                    <li>Learned about animation data sources: CMU and La Forge.</li>
+                    <li>Checked out the c3d file format and ezc3d package for motion data.</li>
+                </ul>
+                <p></p>
+            </section>
+           
+            <hr>
+            <p><i><a href="https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Physical_Chemistry_(LibreTexts)/06:_The_Hydrogen_Atom/6.02:_The_Wavefunctions_of_a_Rigid_Rotator_are_Called_Spherical_Harmonics" class="external">Image adapted from Chem Libre Texts</a></i></p>
+            <p><i>Last edited 23/11/2024</i></p>
+        </article>
+    </main>
+    <script src="../code/common.js"></script>
+</body>
+</html>

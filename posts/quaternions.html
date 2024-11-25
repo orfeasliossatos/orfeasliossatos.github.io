@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Inverse Kinematics</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Quaternions</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <p style="font-style:italic">A post about the various things you may want to do with a quaternion.</p>
+                <hr>
+            </section>
+            <p>This post is not meant to be a <a href="https://en.wikipedia.org/wiki/Quaternion" class="external">comprehensive overview</a> of quaternions, but only to answer a few specific questions I have had while building a skeletal animation engine.</p>
+            <section>
+                <h2>Contents</h2>
+                <ol>
+                    <li>What is a quaternion?</li>
+                    <li>Algebraic structure of the quaternions.</li>
+                    <li>Rotation versus orientation.</li>
+                    <li>Weighted average of quaternions.</li>
+                    <li>Unrolling quaternions.</li>
+                    <li>Other representations of rotation.</li>
+                </ol>
+            </section>
+
+
+            <section>
+                <h3>1. What is a quaternion?</h3>
+                <p>A quaternion is a mathematical object that can encode a rotation. They are widely used in game programming for their relative compactness, compared to something like a rotation matrix.</p>
+                <p>They are best understood as the weighted average of the identity with a rotation of 180° around an axis. </p>
+            </section>
+
+            <section>
+                <h3>2. Algebraic structure of the quaternions.</h3>
+                <p>A quaternion \(q \in \mathbb{H}\) is a weighted sum of four basis elements \(\{1, i, j, k\}\). With four real numbers \(w, x, y, z \in \mathbb{R}\), we may write $$q=w+xi+yj+zk$$</p>
+                <p>The basis elements are imaginary, that is they square to $$i^2=j^2=k^2=-1,$$ and they anti-commute.$$ij=-ji=k$$ $$jk=-kj=i$$ $$ki=-ik=j$$</p>
+                <p>The quaternions are a kind of algebra. That means that a lot of common arithmetic rules exist for the quaternions too. We can combine quaternions \(q_1, q_2 \in \mathbb{H}\) by adding them $$q_1+q_2=(w_1+w_2) + (x_1+x_2)i + (y_1+y_2)j+(z_1+z_2)k$$ or multiplying them together $$\begin{align}q_1q_2&=(w_1+x_1i+y_1j+z_1k)(w_2+x_2i+y_2j+z_2k)\\&=(w_1w_2-x_1x_2-y_1y_2-z_1z_2)\\&+(w_1x_2+x_1w_2+y_1z_2-z_1y_2)i\\&+(w_1y_2 -x_1z_2 + y_1w_2 + z_1x_2)j \\&+(w_1z_2+x_1y_2-y_1x_2+z_1w_2)k.\end{align}$$</p>
+                <p>And as such there are null quaternions for addition and multiplication, which are the scalars \(0\) and \(1\).</p>
+                <p>You can see that there is a scalar part \(w\) and "vector" part \(xi+yj+zk\) to the quaternion. The vector part of the quaternion encodes the direction of rotation, and the scalar part encodes the angle of rotation, up to quaternion norm. So we can write any quaternion as $$q=w+\boldsymbol {v}.$$ In which case multiplication becomes $$q_1q_2=w_1w_2-\boldsymbol{v}_1\cdot \boldsymbol{v}_2+w_1\boldsymbol{v}_2+w_2\boldsymbol{v}_1 + \boldsymbol{v}_1 \times \boldsymbol{v}_2.$$</p>
+                <p>In general, the cross product term means that multiplication in the quaternions is not commutative. We can measure in what sense quaternions don't commute by computing their Lie bracket $$q_1q_2-q_2q_1=2(\boldsymbol{v}_1\times\boldsymbol{v}_2).$$</p>
+                <p>What is the geometric meaning of this statement? Well, when both quaternions represent a rotation around colinear vectors, then it doesn't matter in which order they are applied. </p>
+                <p>For example, if we flip the vector part so that it points in the opposite direction, that's called conjugation. $$q^*=w-\boldsymbol{v}.$$ Then the product of a quaternion with its conjugate commutes and yields a scalar $$q^*q=qq^*=w^2+\boldsymbol{v}^2$$</p>
+                <p>So we can show that \(q\) has a multiplicative inverse, which represents the opposite rotation by the same angle. $$q^{-1}=\frac{q^*}{||q||}$$</p>
+                <p>Now if instead the rotations are not around colinear vectors, then the order does matter. Take for example the identity $$ij-ji=2k.$$ Consider the difference between </p>
+                
+            </section>
+
+            <section>
+                <h2>Sources</h2>
+                <hr>
+                <ul>
+                    <li>[<a href="https://projectivegeometricalgebra.org/" class="external">link</a>] Projective Geometric Algebra Illuminated. Eric Lengyel.</li>
+                </ul>
+            </section> 
+
+            <p><i>Last edited 03/11/2024</i></p>
+        </article>
+    </main>
+    <script src="../code/common.js"></script>
+</body>
+</html>

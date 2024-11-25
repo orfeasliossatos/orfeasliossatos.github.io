@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Research Questions</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Research Questions</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <p style="font-style:italic">A list of research questions that I have.</p>
+                <hr>
+            </section>
+            
+            <section>
+                <p>In the following I aim to loosely track my progress on big questions. These probably have known answers that I am simply unaware of, and that's okay as well.</p>
+                
+                <h2>Directions</h2>
+                <hr>
+                <p>These are my research interests at this moment.</p>
+                <ul>
+                    <li>Geometric skinning</li>
+                    <li>Animation compression</li>
+                </ul>
+                <p></p>
+            </section>
+            <section>
+                <h2>Questions</h2>
+                <hr>
+                <p>When I find a satisfactory answer, I will add the question to an archive of previous questions.</p>
+                
+                <h3>1. What is a Lie algebra?</h3>
+                <p>In answering this questions, I want to be able to explain the geometric meaning of \(ij-ji=2k\), and give examples in Lie brackets in other mathematical groups that are used in video games. I also expect to understand the relation between the different representations of rotation through the theory of parallel transport.</p>
+            
+                <h3>2. When  does Dual Quaternion skinning fail?</h3>
+                <p>Does the well-known candy-wrapper effect for linear blend skinning have an analog for dual quaternion skinning when you include dilations? What is the simplest example of such a failure case, and what is the mathematical reason behind it?</p>
+                
+                <h3>3. What is the Pontryagin Dual of the quaternions?</h3>
+                <p>A quaternion \(q \in \mathbb{H}\) is a weighted sum of four basis elements \(\{1, i, j, k\}\). With four real numbers \(w, x, y, z \in \mathbb{R}\), we may write $$q=w+xi+yj+zk$$</p>
+                <p>The Pontryagin Dual is the set of functions \(\hat{\mathbb{H}}\) of the form\(\chi:\mathbb{H}\rightarrow\mathbb{S}^1 \) from an abelian locally compact Hausdorff group to the complex unit circle that preserves the group structure. Namely, \(\chi(q_1+q_2)=\chi(q_1)\chi(q_2)\). These functions are a generalisation of a Fourier basis for real functions, so it could be interesting to see if it makes sense to compress an animation sequence according to this basis. The only issue is that \(\mathbb{H}\) is not an abelian group, so there should be some kind of symmetry-breaking to understand and resolve.</p>
+
+                <h3>4. Sampling rate for Lossless Animation Reconstruction?</h3>
+                <p>Claude Shannon's sampling theorem for real-valued signals says that in order to perfectly reconstruct a signal, your sampling rate must be at least double its the signal's highest frequency.</p>
+                <p>The question is, what exactly does a frequency mean in rotation-valued signals? May we simply regard each rotation coordinate as independent, or should we use a Quaternion Fourier Transform theory for a different approach?</p>
+
+                <h3>5. How do you parse a common motion files?</h3>
+                <p>Downloaded the LAFAN dataset and want to try out compression.</p>
+
+                <h3>6. How do spherical harmonics relate to the 3D rotation group?</h3>
+                <p>What is the link between representation theory and Fourier-like transforms?</p>
+            </section>
+
+            <p><i>Last edited 05/11/2024</i></p>
+        </article>
+    </main>
+    <script src="../code/common.js"></script>
+</body>
+</html>
