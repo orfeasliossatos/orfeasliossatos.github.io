@@ -34,6 +34,14 @@
             </section>
             
             <section>
+                <div class="card-container-single">
+                    <div class="card">
+                        <img src="../images/inversekinematics.png" alt="duality" class="card-image">
+                    </div>
+                </div>
+            </section>
+
+            <section>
                 
                 <p style="font-style:italic"> (WIP) An interactive 2D-IK project made for the Pico-8. An introduction to forward and inverse kinematics, as well as tangent curve optimization.</p>
 
@@ -55,8 +63,8 @@
             <section>
                 <h3>1. Forward Kinematics</h3>
                 <p>In our 2D model, we have \(n\) bones with length \(l_i\) and relative joint angles \(\alpha_i\). We consider only simple kinematic chains that don't split or reconnect. Something as basic as a tail or an arm. The joint angle is the angle of the bone relative to its parent.</p>
-                <div class="card">
-                    <img src="../gifs/ik_1.gif" alt="Forward kinematic animation" class="card-image" width="100%" height="100%">
+                <div class="card-container-single">
+                    <img src="../gifs/ik_1.gif" alt="Forward kinematic animation" class="card" width="100%" height="100%">
                 </div>
                 <p>The first bone is called the root bone and can be set arbitrarily. Every bone after that is connected to its parent, and so its starting position must be where the previous one ends. </p>
                 <p>In this scenario, we want to know where bone \(i+1\) begins, where \(i\geq1\) since we already know the position of the root \(p_1\). Call that point \(p_{i+1}=(x_{i+1},y_{i+1})\). We can iteratively compute \(p_{i+1}\) given both \(p_{i}\) and the cumulated angle \(\beta_i=\sum_{k=1}^i\alpha_k\) of all the previous bones. This yields the following equations.</p>
@@ -84,12 +92,12 @@
                 <p>The method of gradient descent finally tells us that we need only move iteratively and slowly (by a factor \(\eta\)) in the direction that minimizes the loss.</p>
                 <p>$$a_j \leftarrow a_j -  \eta\frac{\partial d_1(p_i,p_i^*)}{\partial \alpha_j}$$</p>
                 <p>Actually implementing this algorithm however, I noticed a few strange things. First, I noticed that I had to invert the sign of the gradient update, otherwise it would attempt to maximise the distance function. I'm not too sure about what went wrong there.</p>
-                <div class="card">
-                    <img src="../gifs/ik_0.gif" alt="Wrong gradient" class="card-image" width="100%" height="100%">
+                <div class="card-container-single">
+                    <img src="../gifs/ik_0.gif" alt="Wrong gradient" class="card" width="100%" height="100%">
                 </div>
                 <p>Second, attempting to pull the joint outside of its range would cause highly erratic, unstable motion. The low framerate on the gif is hiding the oscillation back and forth every frame. </p>
-                <div class="card">
-                    <img src="../gifs/ik_2.gif" alt="Jittering skeleton" class="card-image" width="100%" height="100%">
+                <div class="card-container-single">
+                    <img src="../gifs/ik_2.gif" alt="Jittering skeleton" class="card" width="100%" height="100%">
                 </div>
                 <p>My guess for why this is happening is that the curvature of the loss curve becomes so great that the gradient descent algorithm becomes unstable and cannot converge, causing it to jump back out of the local minimum. Can we see this theoretically? Let's compute the second derivative of the distance function.</p>
                 <p>$$\frac{\partial^2 d_1(p_i,p_i^*)}{\partial \alpha_j \partial \alpha_j}$$</p>

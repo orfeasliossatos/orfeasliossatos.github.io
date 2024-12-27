@@ -34,23 +34,37 @@
             </section>
             
             <section>
+                <div class="card-container-single">
+                    <div class="card">
+                        <img src="../images/sphericalharmonics.png" alt="duality" class="card-image">
+                    </div>
+                </div>
+            </section>
+            
+            <section>
                 <p style="font-style:italic">Minimalistic research notes on an experiment in lossy animation compression.</p>
             </section>
             
             <section>
                 <h2>Motivation</h2>
                 <hr>
-                <p>I think about motion data compression a lot, it was one of the big topics of my internship at Ubisoft.</p>
+                <p>In the game Sky: Children of the Light, a concert by singer Aurora was attended by over four thousand concurrent players. To avoid lag, player actions and animations were heavily restricted since loading all unique animations into RAM could overwhelm memory.</p>
+                <p>Here I suggest an alternative approach. We stream compressed animations from disk and decompress them on the fly. This would move the load onto compute instead of memory. How can this be done? From my experience documenting animation compression at Ubisoft, significant memory savings are already made with bit tricks, as most animation tracks are sparse or constant. However, quaternion tracks are a richer signal.</p>
+                <p>Quaternions are uncommon objects with properties like double-covering, unitarity, and non-commutativity. While their high correlation over time suggests frequency-based compression might work, they must be afforded special treatment if we are to approach the problem rigourously.</p>
+               </section>
 
-                <p>I learned many methods of compressing motion data. A lot of it comes down to bit tricks since animation tracks are mostly empty of constant except for the quaternion tracks.</p>
-
-                <p>These quaternion tracks make up most of the interesting content, but it is not obvious whether a mathematically rigourous treatment of the signal would enable fast decompression and streaming.</p>
-
-                <p>This is the question I explore in this post.</p>
+            <section>
+                <h2>Quaternion Fourier Transform</h2>
+                <hr>
+                <p>If we are to treat quaternion-valued signals as first class citizens, then we need to define the Quaternion Fourier Transform. My reference is the book <a href="https://www.taylorfrancis.com/books/mono/10.1201/9781003184478/quaternion-clifford-fourier-transforms-eckhard-hitzer" class="external">Quaternion and Clifford Fourier Transforms</a>, by Eckard Hitzer.</p>
+                
+                <p>Once this object is in hand, we will be able reach out to the vast world of signal processing, recovering for example an Uncertainty Principle that can tell us the tradeoff between animation segment length and frequency resolution.</p>
+                <p>This will allow us to derive a Short-time Quaternion Fourier Transform, which is essential since we intend to slice up an animation into many streamable segments.</p>
+                <p>The plan is to selectively zero-out particular frequency coefficients of the animation track.</p>
             </section>
 
             <section>
-                <h2>Background</h2>
+                <h2>Random Notes</h2>
                 <hr>
                 <p>The point is that we need the equivalent of a frequency for elements of \(SO(3)\). I know that for locally compact Abelian groups there exists the Pontryagin dual, which generalises the Fourier transform, but quaternions are not Abelian.</p>
                 <p>I have seen papers around that claim a well-defined quaternion Fourier transform, but I cannot judge whether it makes mathematical sense. I have also seen the words "representation theory" used in the same context as Fourier transforms, so I will definitely look into spherical harmonics.</p>
@@ -69,6 +83,11 @@
             <section>
                 <h2>Research Notes</h2>
                 <hr>
+                <p>(25/11/2024)</p>
+                <ul>
+                    <li>Practiced compressing synthetic sinusoidal data with a simple frequency ratio drop-out algorithm.</li>
+                    <li>Acquired a book on Quaternion and Clifford Transforms.</li>
+                </ul>
                 <p>(24/11/2024)</p>
                 <ul>
                     <li>Illustrated a proof of the Cartan-Dieudonné theorem.</li>
