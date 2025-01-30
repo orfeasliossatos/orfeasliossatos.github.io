@@ -447,6 +447,13 @@ input {
         text-align: left;
     }
 
+    
+    .card-container-single {
+        padding: 2rem;
+        margin-left: 4rem;
+        margin-right: 4rem;
+    }
+
     #pfp {
         margin: 1rem auto;
         float: none;

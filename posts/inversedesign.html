@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Elastic Shape Optimisation</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Elastic Shape Optimisation</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <div class="card-container-single">
+                    <div class="card">
+                        <embed src="../images/dinoinverse.html" alt="dinosaur" class="card-image">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <p style="font-style:italic">An overview of the second project for the 2024 edition of CS-457 Geometric Computing at EPFL. Project was completed in collaboration with <a href="https://www.linkedin.com/in/shivang-sachar-9924b31a4/" class="internal">Shivang Sachar</a> and <a href="https://www.linkedin.com/in/charisoudis/" class="internal">Athanasios Charisoudis</a>.</p>
+            </section>
+            
+            <section>
+                <h2>Introduction</h2>
+                <hr>
+                <p>We're in a garage, pouring hot rubber into a dinosaur mould. After cooling, we crack open the mould and a rubber dinosaur springs out. It flops and squishes under gravity, and doesn't look much like the original dinosaur.</p>
+                <div class="card-container-single">
+                    <div class="card">
+                        <img src="../images/floppy_dino.png" alt="dinosaur" class="card-image">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Problem statement</h2>
+                <hr>
+                <p>How should we design a second mould, such that the deformed dinosaur looks like the original mould?</p>
+            </section>
+
+            <section>
+                <h2>Part 1 - Modelling elastic deformation</h2>
+                <hr>
+
+                <p>We need to figure out what the rubber dinosaur will look like under gravity. The strategy is to discretize a theory of elastic continuum mechanics. </p>
+                <p>There are two contending forces at play. On one hand, gravity will pull the shape \(\Omega\subset \mathbb{R}^3\) downwards causing a deformation \(\Phi:\mathbb{R}^3\rightarrow\mathbb{R}^3\). On the other hand, the internal elastic forces will pull the shape back up.</p>
+                <p>We imagine that the material is hyperelastic. It can't permanently deform, and when there is no deformation \(\Phi(X)=X, \forall X\in\Omega\), there are no elastic forces.</p>
+                <p>However, rather than thinking of forces pulling the shape in different directions, we will take the point of view of an energy density at each point of the shape. At rest, the dinosaur settles into a position where the total energy is minimized.</p>
+                <p>Let's make a few remarks about  before formulating the elastic and gravitational energy densities.</p>
+                <ul>
+                    <li>If a deformation is a pure translation \(\Phi(X)=X+t\) or a pure rotation \(\Phi(X)=RX\) then there should be no elastic energy.</li>
+                    <li>Consider an infinitesimal fiber \(v\) of the shape \(\Omega\). </li>
+                    <li>The gravitational energy density should be uniform throughout the shape.</li>
+                </ul>
+            </section>
+
+
+           
+            <hr>
+            <p><i>Last edited 29/12/2024</i></p>
+        </article>
+    </main>
+    <script src="../code/common.js"></script>
+</body>
+</html>
