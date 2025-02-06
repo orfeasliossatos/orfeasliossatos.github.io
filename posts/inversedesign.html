@@ -36,13 +36,13 @@
             <section>
                 <div class="card-container-single">
                     <div class="card">
-                        <embed src="../images/dinoinverse.html" alt="dinosaur" class="card-image">
+                        <embed src="../images/floppy_dino.png" alt="dinosaur" class="card-image">
                     </div>
                 </div>
             </section>
 
             <section>
-                <p style="font-style:italic">An overview of the second project for the 2024 edition of CS-457 Geometric Computing at EPFL. Project was completed in collaboration with <a href="https://www.linkedin.com/in/shivang-sachar-9924b31a4/" class="internal">Shivang Sachar</a> and <a href="https://www.linkedin.com/in/charisoudis/" class="internal">Athanasios Charisoudis</a>.</p>
+                <p style="font-style:italic">An overview of the second project for the 2024 edition of CS-457 Geometric Computing at EPFL. Project was completed in collaboration with <a href="https://www.linkedin.com/in/shivang-sachar-355550345/" class="internal">Shivang Sachar</a> and <a href="https://www.linkedin.com/in/charisoudis/" class="internal">Athanasios Charisoudis</a>.</p>
             </section>
             
             <section>
@@ -59,23 +59,21 @@
             <section>
                 <h2>Problem statement</h2>
                 <hr>
-                <p>How should we design a second mould, such that the deformed dinosaur looks like the original mould?</p>
+                <p>How should we design a mould, such that the deformed dinosaur matches the original model?</p>
             </section>
 
             <section>
                 <h2>Part 1 - Modelling elastic deformation</h2>
                 <hr>
+                <h3>1.1 Shape and deformation</h3>
 
-                <p>We need to figure out what the rubber dinosaur will look like under gravity. The strategy is to discretize a theory of elastic continuum mechanics. </p>
-                <p>There are two contending forces at play. On one hand, gravity will pull the shape \(\Omega\subset \mathbb{R}^3\) downwards causing a deformation \(\Phi:\mathbb{R}^3\rightarrow\mathbb{R}^3\). On the other hand, the internal elastic forces will pull the shape back up.</p>
-                <p>We imagine that the material is hyperelastic. It can't permanently deform, and when there is no deformation \(\Phi(X)=X, \forall X\in\Omega\), there are no elastic forces.</p>
-                <p>However, rather than thinking of forces pulling the shape in different directions, we will take the point of view of an energy density at each point of the shape. At rest, the dinosaur settles into a position where the total energy is minimized.</p>
-                <p>Let's make a few remarks about  before formulating the elastic and gravitational energy densities.</p>
-                <ul>
-                    <li>If a deformation is a pure translation \(\Phi(X)=X+t\) or a pure rotation \(\Phi(X)=RX\) then there should be no elastic energy.</li>
-                    <li>Consider an infinitesimal fiber \(v\) of the shape \(\Omega\). </li>
-                    <li>The gravitational energy density should be uniform throughout the shape.</li>
-                </ul>
+                <p>We need to figure out what the rubber dinosaur will look like under gravity. That is, given a tetrahedral mesh description of the dinosaur, we need to design a computer programme that will return an updated mesh reflecting a settled state.</p>
+                <p>Let's call the dinosaur \(\Omega\subset \mathbb{R}^3\). There are two contending forces at play. On one hand, gravity will pull the dinosaur downwards causing a deformation \(\Phi:\mathbb{R}^3\rightarrow\mathbb{R}^3\). On the other hand, the internal elastic forces will pull the shape back up.</p>
+                <p>Since we do not need to simulate the entire deformation process, an energy description of the dinosaur is practical. When the rubber is released from the mould it has a gravitational potential energy density, and as the shape deforms it builds up elastic potential energy density. The gravitational and elastic potential energies cumulate in a total energy density.</p>
+                <p><b>To compute the static equilibrium state of the dinosaur, we perform conjugate gradient descent on its total energy by updating its tetrahedral mesh.</b></p>
+                <h3>1.2</h3>
+                <p>We imagine that the material is hyperelastic and has homogeneous mass density. It can't permanently deform, and when there is no deformation there are no elastic forces.</p>
+                
             </section>
 
 
