@@ -63,16 +63,18 @@
             </section>
 
             <section>
-                <h2>Part 1 - Modelling elastic deformation</h2>
+                <h2>Part 1 - Forward Simulation</h2>
                 <hr>
-                <h3>1.1 Shape and deformation</h3>
+                <h3>1.1 Static equilibrium</h3>
 
-                <p>We need to figure out what the rubber dinosaur will look like under gravity. That is, given a tetrahedral mesh description of the dinosaur, we need to design a computer programme that will return an updated mesh reflecting a settled state.</p>
-                <p>Let's call the dinosaur \(\Omega\subset \mathbb{R}^3\). There are two contending forces at play. On one hand, gravity will pull the dinosaur downwards causing a deformation \(\Phi:\mathbb{R}^3\rightarrow\mathbb{R}^3\). On the other hand, the internal elastic forces will pull the shape back up.</p>
-                <p>Since we do not need to simulate the entire deformation process, an energy description of the dinosaur is practical. When the rubber is released from the mould it has a gravitational potential energy density, and as the shape deforms it builds up elastic potential energy density. The gravitational and elastic potential energies cumulate in a total energy density.</p>
-                <p><b>To compute the static equilibrium state of the dinosaur, we perform conjugate gradient descent on its total energy by updating its tetrahedral mesh.</b></p>
-                <h3>1.2</h3>
-                <p>We imagine that the material is hyperelastic and has homogeneous mass density. It can't permanently deform, and when there is no deformation there are no elastic forces.</p>
+                <p>We need to figure out what the rubber dinosaur will look like when it settles into static equilibrium. That is, given a tetrahedral mesh description of the dinosaur, we need to design a computer programme that will return an updated mesh where the sum of forces is zero.</p>
+                <p>Let's call the dinosaur \(\Omega\subset \mathbb{R}^3\). There are two contending forces at play. On one hand, gravity will pull the dinosaur downwards. On the other hand, the internal elastic forces will pull the shape back up. We describe a deformation of the mesh with the function \(\Phi:\mathbb{R}^3\rightarrow\mathbb{R}^3\).</p>
+                <p>Since we do not need to simulate the entire deformation process, an energy description of the dinosaur is practical. Gravitational and elastic potential energies cumulate at each point of the dinosaur. <b>To compute the static equilibrium state of the dinosaur, we iteratively update its tetrahedral mesh to minimize the total energy.</b></p>
+                <h3>1.2 Elastic energy density - Material model</h3>
+                <p>We assume that the material is hyperelastic and has homogeneous mass density. So it can't permanently deform or completely flatten, and when there is no deformation there are no elastic forces. Formally, the energy depends purely on the deformation \(\Phi\). </p>
+                <p>To compute the elastic energy in the dinosaur, let's step back from dinosaurs for the moment and think about Hooke's Law for 1D materials.
+                <p>In order to local deformations are captured by the Jacobian \(\nabla \Phi \in \mathbb{R}^{3 \times 3}\)</p>
+                <p></p>
                 
             </section>
 

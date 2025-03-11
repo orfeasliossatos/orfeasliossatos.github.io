@@ -494,11 +494,9 @@ input {
     }
 
     .split span {
-        display:block;
-        text-align: right;
     }
     .split span::before {
-        content:"— "
+        content:" "
     }
 
     .card {
