@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
+
+    <title>Orfeas | Animation Engine</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Projective Animation Engine</h1>
+                <hr>
+            </section>
+            
+            <section>
+                <div class="card-container-single">
+                    <div class="card">
+                        <img src="../images/pga.png" alt="duality" class="card-image">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                
+                <p style="font-style:italic">A project for practicing C++ using Visual Studio and learning about game engine architecture.</p>
+
+            </section>
+
+            <section>
+                <h2>Project description</h2>
+                <hr>
+                <p>The goal of this project is to apply conformal geometric algebra to skeletal animation.</p>
+                <p>For this we can set a number of subgoals.</p>
+                <ul>
+                    <li>Write an algebra library.</li>
+                    <li>Read and write mesh and animation data.</li>
+                    <li>Display meshes in a window.</li>
+                    <li>Implement skinning algorithms.</li>
+                </ul>
+                <p>In this post there is one section per subgoal, as well as a project log in bullet points where I write things I learn or want to remember.</p>
+            </section>
+
+            <section>
+                <h2>Project Log</h2>
+                <hr>
+                <p>
+                    <ul>
+                        <li>(12/04/2025) Learning like the first time over at learncpp.com, I read through chapter 0.</li>
+                        <ul>
+                            <li>Disabled compiler extensions on my Visual Studio project in order to comply to the C++ standard.</li>
+                            <li>On all build configurations, turned compiler warnings all the way up, and made Visual Studio treat them as errors.</li>
+                            <li>Chosen language standard C++20. Visual Studio defines the _MSVC_LANG macro, which contains a code for the language standard in use by the project.</li>
+                            <li><b>Exported project settings</b>, cool feature.</li>
+                        </ul>
+                    </ul>
+                </p>
+
+            </section>
+            <section>
+                <h2>Sources</h2>
+                <hr>
+                <p></p>
+                <ul>
+                    <li>[<a href="https://www.learncpp.com/" class="external">link</a>] The immortal learncpp.com</li>
+                    <li>[<a href="https://projectivegeometricalgebra.org/" class="external">link</a>] Header image for PGA-Illuminated</li>
+                </ul>
+            </section> 
+
+            <p><i>Last edited 12/03/2025</i></p>
+        </article>
+    </main>
+    <script src="../code/common.js"></script>
+</body>
+</html>
