@@ -66,12 +66,77 @@
                 <hr>
                 <p>
                     <ul>
-                        <li>(12/04/2025) Learning like the first time over at learncpp.com, I read through chapter 0.</li>
+                        <li>(26/04/2025)</li>
+                            <ul>
+                                <li>A Visual Studio project has properties for each language, but will only show those properties if a corresponding language file exists.</li>
+                            </ul>
+                        <li>(25/04/2025)</li>
+                        <ul>
+                            <li>Downloaded a CUDA toolkit to learn a bit of Nvidia GPU programming.</li>
+                            <li>You can get device properties with <code>
+                                cudaDeviceProp prop; int device; cudaGetDevice(&device); cudaGetDeviceProperties(&prop, device);</code></li>
+                            <li>Threads are organized into blocks.</li>
+                            
+                            <li>Threads from the same block are grouped into warps of 32.</li>
+                            <li>A streaming multiprocessor (SM) executes up to <code>prop.maxThreadsPerMultiProcessor / 32</code> warps at once.</li>
+                            <li>Blocks scheduled to the <code>prop.multiProcessorCount</code> multiprocessors. There is some assembly code to query the current SM.</li>
+                            <li><b>Tool.</b> Task list in VS lets you jump to predefined keywords in comments, such as TODO and HACK. You can also add your own keywords.</li>
+                        </ul>
+                        <li>(08/04/2025)</li>
+                        <ul>
+                            <li><b>Advice.</b> Avoid undefined and implementation-defined behaviour as much as possible in C++. The simplest example of the latter is <code>sizeof</code>.</li>
+                            <li><b>Warning.</b> In Visual Studio, the debug configuration set all uninitialized variables to zero. The release configuration will not.</li>
+                        </ul>
+                        <li>(07/04/2025)</li>
+                        <ul>
+                            <li>The operator <code>&lt;&lt;</code> is called the <b>insertion</b> operator.</li>
+                            <li>You should end all complete lines with <code>std::endl</code>.</li>
+                            <li><code>std::cout</code> is buffered, and <code>std::endl</code> flushes the buffer. So maybe you want to use <code>\n</code> for efficiency.</li>
+                            <li><code>std::cin</code> is also buffered. When you enter <code>3 4</code> then the buffer <code>['3',' ','4','\n']</code> is passed to the input buffer, and then the <b>extraction</b> operator will copy-assign the next value unless the buffer is empty.</li>
+                            <li>You can check for bad input with <code>std::cin.fail()</code>, in which case you should clear the buffer with <code>std::cin.clear()</code>.</li>
+                        </ul>
+                        <li>(25/03/2025)</li>
+                        <ul>
+                        </ul>
+                        <ul>
+                            <li>Some notes on intialization in C++.</li>
+                            <ul>
+                                <li>Brace initialization disallows narrowing conventions.</li>
+                                <li>You should always initialize a variable with something meaningful. The zero initialization <code>int x {0};</code> for example should only be used if zero is semantically meaningful. Otherwise pick <code>int x {};</code></li>
+                                <li>If a variable is unnused for a good reason, such as a <code>constexpr double pi{ 3.1415 }</code>, then you can use the attribute <code>[[maybe unused]]</code> to suppress compiler warnings.</li>
+                            </ul>
+                        </ul>
+                        <li>(24/03/2025)</li>
+                        <ul>
+                            <li>Static typing means that you can do stack allocation. The compiled program already knows how much to allocate.</li>
+                            <li>C++ can do compile-time type deduction with <code>auto</code> when initializing a complicated type like an initialiser, or <code>decltype</code> when extracting a variable's type.</li>
+                            <li>C++ has a few options for runtime type identification.
+                                <ul>
+                                    <li><code>typeid</code> works statically for non-polymorphic types, and leverages the vtable for dynamic types, if they have a virtual function. The <code>name</code> property is <b>compiler dependent!</b></li>
+                                    <li><code>std::any</code> lets you store any type, but you must use <code>std::any_cast&ltT&gt</code> to retrieve the value.</li>
+                                    <li><code>std::variant&lt...&gt</code> is a type union, allowing type checking with <code>std::holds_alternative&ltT&gt</code> and retrieving with <code>std::get&ltT&gt</code>.</li>
+                                </ul>
+                                Note however that these objects are larger in memory.
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul>
+                        <li>(13/03/2025)</li>
+                        <ul>
+                            <li>Visual Studio opts to report the line at which the compiler stopped, instead of the line where the error lies.</li>
+                            <li><b>Advice. </b>Comment liberally, like explaining to someone who's reading for the first time.</li>
+                            <li><b>Tip. </b> Can use the preprocessor directive <code>#if 0</code> to "comment-out" code that contains multi-line comments.</li>
+                            <li><b>Shortcut.</b> In Visual Studio, shortcut for commenting (ctrl+k, ctrl+c) and uncommenting (ctrl+k, ctrl+u).</li>
+                            <li>Downloaded Doxygen to help me generate documentation for the project.</li>
+                        </ul>
+                    </ul>
+                    <ul>
+                        <li>(12/03/2025)</li>
                         <ul>
                             <li>Disabled compiler extensions on my Visual Studio project in order to comply to the C++ standard.</li>
                             <li>On all build configurations, turned compiler warnings all the way up, and made Visual Studio treat them as errors.</li>
-                            <li>Chosen language standard C++20. Visual Studio defines the _MSVC_LANG macro, which contains a code for the language standard in use by the project.</li>
-                            <li><b>Exported project settings</b>, cool feature.</li>
+                            <li>Chosen language standard C++20. Visual Studio defines the <code>_MSVC_LANG</code> macro, which contains a code for the language standard in use by the project.</li>
+                            <li><b>Exported project settings</b>. Feature that lets you create a new project with the same project preferences as a template.</li>
                         </ul>
                     </ul>
                 </p>

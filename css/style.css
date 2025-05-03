@@ -41,8 +41,23 @@ div {
     
 }
 
+
+.banner {
+    background-color: #efe0ca;
+    padding: 1rem 1rem 1rem 1rem;
+    border-radius: 10px;
+}
+
+code {
+    background-color: #cae7ef;
+    padding: 1px;
+    border-radius: 3px;
+    font-family: "Courier New", monospace;
+}
+
+
 .spacer {
-    padding-top: 2rem;
+    padding-top: 1rem;
 }
 
 p {
@@ -71,7 +86,8 @@ a:hover, a:focus {
 }
 
 hr {
-    border-color: var(--body-color)
+    border-color: var(--body-color);
+    margin-bottom: 1rem;
 }
 
 h3 {
@@ -328,7 +344,7 @@ input {
 }
 
 .top-title {
-    text-align: center;
+    text-align: left;
     font-variant: small-caps;
     font-size: 2.5rem;
 }
@@ -417,13 +433,6 @@ input {
     text-align: center;
     font-weight: bold;
     border-bottom: 2px solid var(--body-color);
-}
-
-#contact-box {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    padding: 0rem;
 }
 
 .post {
