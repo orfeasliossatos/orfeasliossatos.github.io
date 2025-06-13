@@ -41,35 +41,27 @@
                 </div>
             </section>
             <section>
-                <p style="font-style:italic">A list of research questions that I have.</p>
+                <p style="font-style:italic">A list of things I am confused about.</p>
                 <hr>
             </section>
             
             <section>
-                <p>In the following I aim to loosely track my progress on big questions. These probably have known answers that I am simply unaware of, and that's okay as well.</p>
-                
-                <h2>Directions</h2>
-                <hr>
-                <p>These are my research interests at this moment.</p>
-                <ul>
-                    <li>Geometric skinning</li>
-                    <li>Animation compression</li>
-                </ul>
-                <p></p>
+                <p>I have had a few questions bouncing in my mind for a while, I come back to them often as a kind of waypost - to see how I'm progressing.</p>
             </section>
             <section>
                 <h2>Questions</h2>
                 <hr>
-                <p>This list will grow or shrink as time goes on.</p>
-                
-                <h3>1. How do you quantize a smooth manifold?</h3>
-                
-                <h3>2. When  does dual quaternion skinning fail?</h3>
-                
-                <h3>3. How do we do calculus with geometric algebra?</h3>
+                <h3>How do you compress a Lie group?</h3>
+                <p>There's something super interesting about skeletal animation compression for real-time applications like game engines and robotics. You want to store an animation file with as few bits as possible, while maintaining the ability to directly run the animation in compressed format. </p>
+                <p>I suppose the keyword for this would be something like <i>homomorphic compression</i> for Lie groups.</p>
+                <h3>When  does dual quaternion skinning fail?</h3>
+                <p>Skeletal animations are fascinating. Every bone in the skeleton is a transformation, and the skin is painted with the strength of each bone on the motion of skin. What's interesting then is that each skin vertex is acted upon by a weighted interpolation of rigid body transformations. Dual quaternions are representation of SE(3) that preserve the interpolation group action better than homogeneous matrices.</p>
+                <p>But rigid body transformations are not the end of the story for skeletal animation. Many games make use of scaling on top of rotation and translation. Does it always make sense to linearly interpolate a so-called conformal transformation, or should we be using Conformal Geometric Algebra?</p>
+                <h3>What is Quantum Field Theory?</h3>
+                <p>What is it? Why do we need it? How are ideas like action and equations of motion derived from the theory?</p>
             </section>
 
-            <p><i>Last edited 06/02/2025</i></p>
+            <p><i>Last edited 13/06/2025</i></p>
         </article>
     </main>
     <script src="../code/common.js"></script>
