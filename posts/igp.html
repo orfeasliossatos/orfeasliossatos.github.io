@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    <title>Orfeas | IGP</title>
+</head>
+<body>
+    <main>
+        <nav class="sidebar">
+            <div class="sidebar-links">
+                <a class="internal" title="Landing page" href="../index.html">Home</a>
+                <a class="internal" title="Biography, interests, resume" href="../about.html">About</a>
+                <a class="internal" title="Contact information" href="../contact.html">Contact</a>
+                <a class="internal" title="Don't get lost" href="../distract.html">Distract</a>
+                <a class="internal" title="News, plans, important information" href="../plans.html">Plans</a>
+            </div>
+        </nav>
+
+        <article class="post">
+            <section>
+                <h1 class="top-title">Inverse Geometric Propulsion</h1>
+                <hr>
+            </section>
+            <p><em><b>TLDR:</b> I wrote an algorithm to control the trajectory of shape-changing rockets.</em></p>
+            <p>Download the <a href="../data/inverse-geometric-propulsion.pdf" class="internal">PDF</a>.</p>
+                <h2>Abstract</h2>
+                <hr>
+                <p>Controlling shape-changing bodies in zero-gravity is complex but critical for tasks like space robotics or animation. We extend a motion planning algorithm for shape-changing bodies to the control of non-zero momentum. By formulating physical motion as a energy-minimising trajectory on a configuration manifold, we enable the discovery of non-trivial, physically valid motion paths that combine shape change with momentum control. The use of a stable variational integrator for the forward simulation leads to an efficient optimisation algorithm. We validate our method on abstract mechanical systems such as rigid bodies and a hinged flap with thrusters. This approach can inform motion planning in space robotics, reinforcement learning, and procedural animation.</p>
+                
+                <h2>Example</h2>
+                <hr>
+                <p>This shape is meant to be an abstraction of a gimballed rocket engine. The idea is that it has a rocket pinned to the tip of one flap. The flap can open or close, which points the rocket up or down. Here I've set the objective for the flap to turn its whole body 90º about its hinge axis, which is only possible if it activates the rocket with good timing. The control algorithm efficiently computes the sequence of hinge angles and forces that together result in the 90º rotation.</p>
+                <div class="card-container">
+                    <div class="card">
+                        <img src="../images/clam_init-fs8.png" class="card-image">
+                        <h3 class="card-caption">Random ❌</h3>
+                    </div>
+                    <div class="card">
+                        <img src="../images/clam_opt-fs8.png" class="card-image">
+                        <h3 class="card-caption">Optimized ✅</h3>
+                    </div>
+                </div>
+            </section>
+
+        </article>
+    </main>
+</body>
+</html>
