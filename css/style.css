@@ -41,17 +41,49 @@ div {
     
 }
 
-
 .banner {
     background-color: #efe0ca;
     padding: 1rem 1rem 1rem 1rem;
     border-radius: 10px;
 }
 
+pre {
+    background: #f4f4f4;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 3px;
+    line-height: 1.5;
+    overflow-x: auto;     /* enable horizontal scrolling */
+    white-space: pre;     /* preserve spaces & newlines */
+    max-width: 100%;      /* don’t exceed parent width */
+}
+
+table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 1em 0;
+   left-align: left;
+}
+
+th, td {
+    padding: 5px 10px;
+    border: 1px solid #000;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
 code {
-    background-color: #cae7ef;
     padding: 1px;
     border-radius: 3px;
+    display: inline-block;
+    min-width: 100%;
     font-family: "Courier New", monospace;
 }
 

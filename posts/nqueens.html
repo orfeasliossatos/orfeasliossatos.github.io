@@ -6,10 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math.css">
     <link rel="stylesheet" href="../code/nqueens/chessboard.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
+    <!-- LaTeX macros-->
+    \(\DeclareMathOperator*{\argmax}{arg\,max}\)
+    \(\DeclareMathOperator*{\argmin}{arg\,min}\)
 
     <title>Orfeas | N-queens</title>
 </head>
@@ -27,17 +31,17 @@
 
         <article class="post">
             <section>
-                <h1 class="top-title">N-Queens</h1>
+                <h1 class="top-title">Solving N-Queens with Markov Chains</h1>
                 <hr>
             </section>
             
             <section>
-                <p style="font-style:italic"> This post is based on a report I wrote with Jean-Baptiste Michel and Gaiëtan Renault for the class Markov Chains and Applications (EPFL, 2022).</p>
-                <p>	When I was in highschool, I braved an applied mathematics class in the dustiest computer room known to man. It was like a dungeon, where photons dared not enter lest they be immediately subsumed by the blinding blaze of the computer screens. </p>
-                <p> One fateful Friday afternoon, our professor issued a challenge. "How many configurations of 8 queens on a chessboard are there, where none of the queens can attack each other?". Before I reveal how I found every configuration, can you find one? </p>
+                <p style="font-style:italic"> This post is based on a report I wrote with Jean-Baptiste Michel and Gaiëtan Renault for the class Markov Chains and Applications at EPFL in 2022.</p>
+		<h3>The 8-queens puzzle</h3>
+                <p> How many configurations of 8 queens on a chessboard are there, such that none of the queens can attack each other? Can you find one? </p>
                 <div id="chessboard"></div>
                 <p style="text-align:center;font-style: italic;">Click anywhere!</p>
-                <p>	The first thing we might want to think about is skipping any configurations that are obviously wrong, like, if all the queens are huddled up in a corner, or standing in a line. We can imagine considering one column at a time, trying every row until we find a safe position. Sometimes we will get stuck and have to go back one column. Inductively, finding a safe position for the queen in the final column is the same as finding a complete solution to the puzzle, since all the previous queens are also safe. This algorithm is called depth-first backtracking. Step through animation below to watch how it works on a smaller board.</p>
+		<p>The classic <em>depth-first backtracking</em> algorithm for this puzzle goes like this. Consider one column at a time, and move a queen down the rows until she is in a safe position, and then move onto the next column. If no rows are free, then return to the previous column. Step through animation below to watch how it works on a smaller board.</p>
                 <div id=DFBTbuttons>
                     <div class="DFBTbutton" onclick=DFBTreset()>↻</div>
                     <div class="DFBTbutton" onclick=DFBTstep()>→</div>
@@ -46,18 +50,55 @@
                     <div id="DFBTboard"></div>
                     <div id="DFBTsols">Solutions found: 0</div>
                 </div>
-                <p> When I returned to the dusty classroom on Monday, I showed the professor my code, and the answer for an 8 by 8 board, 92. I got my bonus points and complimentary chocolate, and promptly forgot about the puzzle.</p>
-                <p>That is until five years later, when I took a class on Markov Chains. For the class project, we had to answer the question "About how many configurations of 1000 queens on a 1000 by 1000 chessboard are there such that none of the queens can attack each other"?</p>
-                <p>Perhaps the word "about" should clue you in to why this is an entirely different beast of a problem. But to really grasp the computational difficulty, look at this graph showing the number of valid configurations for increasing board sizes.</p>
-                <p style="text-align:center"><i>~~WORK IN PROGRESS~~</i></p>
-                <h2>The Markov Chain Monte Carlo Method</h2>
-                <!--
+		<p> The challenge for <em>you</em> is to implement this algorithm yourself. How many solutions are there for an 8 x 8 chessboard?</p>
+		<!--Caught you looking! For the effort, it's 92.--!>
 
-                    <p>Equation : $$ Z_{\infty} = \sum_{c \in C} ...$$</p>
-                    <p>This is an inline equation: \( F = ma \)</p>
+		    <h3>The n-queens puzzle</h3>
+		    <p>What about \(n\) larger than eight? I'll set a minute on the clock and see how many solutions I can enumerate on my MacBook Air (11-inch, 2015) with this Zig program.</p>
+		    <table>
+		<tr>
+		    <td>\(n\)</td>
+		    <td>solutions</td>
+		</tr>
+		<tr>
+		    <td>8</td>
+		    <td>92</td>
+		</tr>
+		<tr>
+		    <td>9</td>
+		    <td>352</td>
+		</tr>
+		<tr>
+		    <td>10</td>
+		    <td>724</td>
+		</tr>
+		<tr>
+		    <td>11</td>
+		    <td>2680</td>
+		</tr>
+		<tr>
+		    <td>12</td>
+		    <td>14200</td>
+		</tr>
+		<tr>
+		    <td>13</td>
+		    <td>73712</td>
+		</tr>
+		<tr>
+		    <td>14</td>
+		    <td>365596</td>
+		</tr>
+	    </table>
 
-                -->
-            </section>
+	    <p>Already after \(n=14\) my computer can no longer return the number of solutions under a minute. The sequence is known up to \(n=27\) and can be viewed as <a class=external href="https://oeis.org/A000170">A000170</a> on the OEIS.</p>
+	    <p>Although an exact solution count escapes us for large \(n\), it is possible to give an estimate for how many solutions there may be, using Monte Carlo simulations. The idea is that if you can randomly draw a zillion configurations and evaluate whether they are valid or not then you can get an estimate for the true number of solutions.</p>
+
+	    <h3>The Metropolis algorithm</h3>
+
+	    <p>Here the rough idea of how to g</p>
+
+	    </section>
+
 
             <section>
                 <h2>Sources</h2>
