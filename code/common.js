@@ -1,4 +1,4 @@
-function toggleParagraph(id) {
+function toggleHidden(id) {
     var childNodes = document.getElementById(id).childNodes;
     for (var i = 0; i < childNodes.length; i++) {
         var node = childNodes[i];

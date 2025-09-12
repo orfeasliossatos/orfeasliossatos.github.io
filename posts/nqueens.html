@@ -11,6 +11,9 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="../code/common.js"></script>
     <!-- LaTeX macros-->
     \(\DeclareMathOperator*{\argmax}{arg\,max}\)
     \(\DeclareMathOperator*{\argmin}{arg\,min}\)
@@ -31,85 +34,725 @@
 
         <article class="post">
             <section>
-                <h1 class="top-title">Solving N-Queens with Markov Chains</h1>
+                <h1 class="top-title">Counting N-Queens Solutions</h1>
                 <hr>
             </section>
             
             <section>
-                <p style="font-style:italic"> This post is based on a report I wrote with Jean-Baptiste Michel and Gaiëtan Renault for the class Markov Chains and Applications at EPFL in 2022.</p>
+		<p><i>Based on a report for Markov Chains and Applications at EPFL in 2022 with <a href="https://www.linkedin.com/in/jbm14/" class="external">Jean-Baptiste Michel</a> and Gaiëtan Renault. Original research from Cheng Zhang & Jianpeng Ma (2009). <a href="#footnotes">[1]</a></i></p>
+		<p><i>Got comments? Send them to <code>oiliossatos@gmail.com</code>!</i></p>
 		<h3>The 8-queens puzzle</h3>
-                <p> How many configurations of 8 queens on a chessboard are there, such that none of the queens can attack each other? Can you find one? </p>
-                <div id="chessboard"></div>
-                <p style="text-align:center;font-style: italic;">Click anywhere!</p>
-		<p>The classic <em>depth-first backtracking</em> algorithm for this puzzle goes like this. Consider one column at a time, and move a queen down the rows until she is in a safe position, and then move onto the next column. If no rows are free, then return to the previous column. Step through animation below to watch how it works on a smaller board.</p>
-                <div id=DFBTbuttons>
-                    <div class="DFBTbutton" onclick=DFBTreset()>↻</div>
-                    <div class="DFBTbutton" onclick=DFBTstep()>→</div>
+		<p>Can you place eight queens on a chessboard such that no two queens attack each other? Click on the chessboard below to try the puzzle!</p>
+                <div class="chessboard eightsquares" id="8queens"></div>
+                <p style="text-align:center;font-style: italic;">Click to add / remove a queen</p>
+
+		<p>Now that you've tried the puzzle, how many different solutions are possible? And more generally, how can we count \(Q(n)\), the number of solutions for \(n\) queens on an \(n\)-by-\(n\) board? That's the problem we'll explore in this post.</p>
+		<h3>Contents</h3>
+		<p>We'll look at three different approaches to counting solutions, each addressing the problems of the last:</p>
+		<ol>
+		    <li><a href="#dfbt"><b>Depth-first backtracking</b></a></li>
+		    <li><a href="#mc"><b>Uniform Monte Carlo integration</b></a></li>
+		    <li><a href="#ais"><b>Annealed importance sampling</b></a></li>
+		</ol>
+		<p>This post contains many interactive visualisations to aid in understanding, accompanied by an implementation in Zig. Please let me know if something breaks on your end.</p>
+		<div class="spacer"/>
+		<h2 id="dfbt">1. Depth-first backtracking</h2>
+
+		<p>The following board shows the progression of a <em>depth-first backtracking</em> solution counting algorithm for the 4-queens problem. Use the ➡️ buttons below to step 🔁 through (left) or reset (right) the algorithm.</p>
+                <div class=Buttons>
+                    <div class="Button" onclick=DFBTstep()>➡️</div>
+                    <div class="Button" onclick=DFBTreset()>🔁</div>
                 </div>
-                <div id="DFBT">
-                    <div id="DFBTboard"></div>
-                    <div id="DFBTsols">Solutions found: 0</div>
-                </div>
-		<p> The challenge for <em>you</em> is to implement this algorithm yourself. How many solutions are there for an 8 x 8 chessboard?</p>
-		<!--Caught you looking! For the effort, it's 92.--!>
+		<div class="chessboard foursquares" id="DFBTboard"></div>
+		<div class="legend" id="DFBTsols">Solutions found: 0</div>
+		<h3>Algorithm</h3>
+		<p>The backtracking algorithm works by building the solution one column at a time. We place exactly one queen in each column so that we never have to worry about vertical attacks; only rows and diagonals need checking. When no spaces in a column are available, we backtrack to the previous column.</p>
+		<p>Here's what that would look like as a recursive function in Zig:</p>
+		<span class="hoverable" onclick=toggleHidden('zig1')>
+		<pre><code id="zig1" class="bordered">
+		<div>Click to reveal / hide.</div>
+		<div class="hidden">fn countSolutions(board: []u8, c: usize, n: usize) usize {
+    if (c == n) return 1;
 
-		    <h3>The n-queens puzzle</h3>
-		    <p>What about \(n\) larger than eight? I'll set a minute on the clock and see how many solutions I can enumerate on my MacBook Air (11-inch, 2015) with this Zig program.</p>
-		    <table>
-		<tr>
-		    <td>\(n\)</td>
-		    <td>solutions</td>
-		</tr>
-		<tr>
-		    <td>8</td>
-		    <td>92</td>
-		</tr>
-		<tr>
-		    <td>9</td>
-		    <td>352</td>
-		</tr>
-		<tr>
-		    <td>10</td>
-		    <td>724</td>
-		</tr>
-		<tr>
-		    <td>11</td>
-		    <td>2680</td>
-		</tr>
-		<tr>
-		    <td>12</td>
-		    <td>14200</td>
-		</tr>
-		<tr>
-		    <td>13</td>
-		    <td>73712</td>
-		</tr>
-		<tr>
-		    <td>14</td>
-		    <td>365596</td>
-		</tr>
-	    </table>
+    var count: usize = 0;
+    for (0..n) |r| {
+	if (isSafe(board, r, c)) {
+	    board[c] = @intCast(r);
+	    count += countSolutions(board, c+1, n);
+	}
+    }
+    return count;
+}</div>
+	    </pre></code>
+		</span>
+		<p>Now, to determine whether a square is safe, recall that we don't need to worry about vertical attacks. Also, because we progress one column at a time, we only need to worry about attacks from previous columns. When <code>board</code> stores the row position \(r_i\) of each queen \(i\), checking for horizontal attacks is easy, while a diagonal attack between queens in columns \(c_i\lt c_j\) is characterised by the following equality condition: \[|r_j - r_i| = c_j-c_i.\]</p>
+		<p>Again, here's a Zig function that implements the check:</p>
+		<span class="hoverable" onclick=toggleHidden('zig2')>
+		<pre><code id="zig2" class="bordered">
+		<div>Click to reveal / hide.</div>
+		<div class="hidden">fn isSafe(board: []u8, rj: usize, cj: usize) bool {
+    for (board[0..cj], [0..cj]) |ri, ci| {
+	if (ri == rj or
+	    @max(ri, rj) - @min(ri, rj) == cj - ci)
+	    return false;
+    }
+    return true;
+}</div>
+	    </pre></code>
+		</span>
+		<h3>Results</h3>
+		<p>Here is the performance I was able to achieve with the above Zig program, running on an Intel Core i5-5250U CPU at 1.6GHz. </p>
+		<table class="numbers">
+		    <tr>
+			<td>\(n\)</td>
+			<td>\(Q(n)\)</td>
+			<td>time (s)</td>
+		    </tr>
+		    <tr>
+			<td>8</td>
+			<td>92</td>
+			<td>0.002</td>
+		    </tr>
+		    <tr>
+			<td>9</td>
+			<td>352</td>
+			<td>0.010</td>
+		    </tr>
+		    <tr>
+			<td>10</td>
+			<td>724</td>
+			<td>0.041</td>
+		    </tr>
+		    <tr>
+			<td>11</td>
+			<td>2'680</td>
+			<td>0.239</td>
+		    </tr>
+		    <tr>
+			<td>12</td>
+			<td>14'200</td>
+			<td>1.227</td>
+		    </tr>
+		    <tr>
+			<td>13</td>
+			<td>73'712</td>
+			<td>6.861</td>
+		    </tr>
+		    <tr>
+			<td>14</td>
+			<td>365'596</td>
+			<td>44.773</td>
+		    </tr>
+		    <tr>
+			<td>15</td>
+			<td>2'279'184</td>
+			<td>330.301</td>
+		    </tr>
+		</table>
 
-	    <p>Already after \(n=14\) my computer can no longer return the number of solutions under a minute. The sequence is known up to \(n=27\) and can be viewed as <a class=external href="https://oeis.org/A000170">A000170</a> on the OEIS.</p>
-	    <p>Although an exact solution count escapes us for large \(n\), it is possible to give an estimate for how many solutions there may be, using Monte Carlo simulations. The idea is that if you can randomly draw a zillion configurations and evaluate whether they are valid or not then you can get an estimate for the true number of solutions.</p>
+		<p>It is pretty clear that the wall clock time balloons as a function of \(n\). Solution counts for higher board sizes are collected in sequence <a class=external href="https://oeis.org/A000170">A000170</a> of the OEIS, which tops out at \(n=26\).</p> 
+	    <h3>Conclusion</h3>
+	    <p>Since exact results for very large \(n\) are evidently out of reach, the challenge for the rest of the post will be to get a good <em>estimate</em> for the solution count for larger \(n\) in reasonable time.</p>
+	    <h2 id="mc">2. Uniform Monte Carlo integration</h2>
+	    <p>Suppose the queens are already on separate columns and rows, preventing horizontal and vertical threats. Picture all the ways of permuting the queens as a vast <em>candidate</em> space \(\mathcal{P}\). We wish to estimate the size of the solution set \(S\) among the candidates.</p>
 
-	    <h3>The Metropolis algorithm</h3>
+	    <p>Before we get into details, we can see how uniform Monte Carlo integration works with the following interactive simulation. Click the 🎲 buttons to generate random permutations of queens.</p>
+	    <div class=Buttons>
+		<div class="Button" onclick=MCrandom(1)>🎲</div>
+		<div class="Button" onclick=MCrandom(10)>10🎲</div>
+		<div class="Button" onclick=MCrandom(100)>100🎲</div>
+	    </div>
+	    <div class="chessboard foursquares" id="MCboard"></div>
+	    <div class="legend" id="MCsols"></div>
+	    <p>Rounding the estimate to the closest integer gives an estimate of 2 solutions after enough samples, which concurs with depth-first backtracking.</p>
+<h3>Algorithm</h3>
+<p>Uniform Monte Carlo integration estimates \(p(n):=Q(n)/n!\), the fractional size of the solution set \(\mathcal{S}\), by independently and uniformily sampling random permutations \(X_1, X_2, \dots, X_T\) from the candidates \(\mathcal{P}\) and computing the estimator \[\hat{p}(n):=\frac{1}{T}\sum_{t=1}^T \mathbf{1}_\mathcal{S}(X_t).\] This estimator is unbiased because the expected value of the indicator function \(\mathbf{1}_\mathcal{S}\) is \(p(n)\). In the following we also refer to \(p(n)\) as \(p\) for clarity. </p>
+<p>In Zig the outline of the algorithm is like this.</p>
+<span class="hoverable" onclick=toggleHidden('zig3.1')>
+    <pre><code id='zig3.1' class="bordered">
+    <div>Click to reveal / hide.</div>
+    <div class=hidden>fn fill(n: usize, board: []usize) void {
+    for (0..n) |i|
+	board[i] = i;
+}
 
-	    <p>Here the rough idea of how to g</p>
+fn uniform_monte_carlo(n: usize, T: usize) usize {
+    var rng = std.Random.DefaultPrng.init(0);
+    const rand = rng.random();
+
+    var board: [n]usize = undefined;
+    fill(n, &board);
+
+    // Enables O(n) safe check.
+    var diags: [4 * n - 2]usize = undefined; 
+
+    var S: usize = 0;
+    for (0..T) |t| {
+        rand.shuffle(usize, &board);
+        if (fastSafe(n, t, &board, &diags))
+            S += 1;
+    }
+
+    return S;
+}</div>
+    </pre></code>
+</span>
+<p>There is a big optimization hiding here thanks to the fact that the queens are already on separate rows and columns. Recall the condition \(|r_j-r_i|=c_j-c_i\) for queens \(i \lt j\). Naïvely checking all pairs for attacks requires \(O(n^2)\) work, but this grows costly as \(n\) increases. </p>
+<h4>Verifying a solution in O(n)</h4>
+<p>Instead of checking all pairs, scan each queen and record which diagonals were occupied. A repeated diagonal means a conflict; no repeats means a valid solution. Using arrays of length \(2n-1\) for marking the major and minor diagonals, lookup is \(O(1)\) and memory use is \(O(n)\). With this method, time complexity for verification drops to \(O(n)\).  
+<p>Here is what that would look like in Zig.</p>
+<span class="hoverable" onclick=toggleHidden('zig3')>
+    <pre><code id="zig3" class="bordered">
+    <div>Click to reveal / hide.</div>
+    <div class="hidden">inline fn fastSafe(
+    n: usize,
+    t: usize,
+    board: []usize,
+    diags: []usize,
+) bool {
+    for (0..n) |c| {
+        const r = board[c];
+        const a = r + c;
+        const b = 3 * n - 2 + r - c;
+
+        if (diags[a] == t or diags[b] == t) {
+            return false;
+        }
+
+        diags[a] = t;
+        diags[b] = t;
+    }
+    return true;
+}</div>
+</pre></code>
+</span>
+<h3>Results</h3>
+<p>Here are the estimates for a fixed \(T=1'000'000\) candidates. The estimates are accompanied by a 95% <em>Wilson</em> confidence interval \((L, U)\) rounded to the closest integer.</p> 
+		<table class="numbers">
+		    <tr>
+			<td>\(n\)</td>
+			<td>solutions</td>
+			<td>\(\hat{p}n!\)</td>
+			<td>L</td>
+			<td>U</td>
+			<td>time (s)</td>
+		    </tr>
+		    <tr>
+			<td>10</td>
+			<td>724</td>
+			<td>660</td>
+			<td>571</td>
+			<td>764</td>
+			<td>6.018</td>
+		    </tr>
+		    <tr>
+			<td>11</td>
+			<td>2'680</td>
+			<td>2'395</td>
+			<td>1'860</td>
+			<td>3'082</td>
+			<td>6.655</td>
+		    </tr>
+		    <tr>
+			<td>12</td>
+			<td>14'200</td>
+			<td>14'849</td>
+			<td>10'461</td>
+			<td>21'076</td>
+			<td>7.554</td>
+		    </tr>
+		    <tr>
+			<td>13</td>
+			<td>73'712</td>
+			<td>56'043</td>
+			<td>29'485</td>
+			<td>106'522</td>
+			<td>8.421</td>
+		    </tr>
+		    <tr>
+			<td>14</td>
+			<td>365'596</td>
+			<td>435'891</td>
+			<td>186'184</td>
+			<td>1'020'498</td>
+			<td>8.623</td>
+		    </tr>
+		    <tr>
+			<td>15</td>	
+			<td>2'279'184</td>
+			<td>1'307'674</td>	
+			<td>230'830</td>	
+			<td>7'408'050</td>
+			<td>9.223</td>
+		    </tr>
+		    <tr>
+			<td>16</td>
+			<td>?</td>
+			<td>41'845'579</td>
+			<td>11'475'330</td>
+			<td>152'592'188</td>
+			<td>10.400</td>
+		    </tr>
+		</table>
+	    </section>
+	    <p>While the estimates look reasonable and were computed very quickly, the confidence intervals for \(n\ge 15\) are so large that one is not really inclined to believe the estimate, especially as I was unable to compute the ground-truth number of solutions for \(n=16\) at all. To tighten the confidence intervals we need to increase \(T\), but how much?</p> 
+	    <h3>Analysis</h3>
+	    <p>Say we were content with merely having high confidence in the estimated <em>order of magnitude</em>. That is, we would like \(T\) large enough so that \(\hat{p}\) is with at least 95% probability within a factor 10 of the true \(p\). We can deduce how many samples we need from the Chernoff bound \[\operatorname{Pr}\left[|\hat{p} - p| \geq \epsilon p\right] \leq 2\exp\left(-\frac{\epsilon^2 p T}{3}\right) \leq \delta,\] with \(\epsilon = 9\) and \(\delta=0.05\). This tells us that the probably-correct-order-of-magnitude estimate is achievable with \[T\geq \frac{3}{\epsilon^2 p}\log\left(\frac{2}{\delta}\right)\] samples. But the probability \(p\) appears in the denominator of the lower bound, which is precisely the thing we are trying to estimate anyway, and has no closed form outside of an asymptotic result by Simkin (2021): \[p(n)=\frac{\left((1+o(1))ne^{-\alpha})\right)^n}{n!}\approx \frac{(ne^{-\alpha})^n}{n!}\approx\frac{e^{-(\alpha-1)n}}{\sqrt{2\pi n}},\] with \(\alpha\approx 1.944\). Unfortunately, it follows that we need an exponential amount of samples to estimate the correct order of magnitude with uniform sampling.
+	    <h3>Conclusion</h3>
+	    <p>The fundamental problem of integration via uniform random sampling for \(n\)-queens is that the proportion of solutions is so small that for very large \(n\) it becomes unlikely to even see a single solution at all. This is something <em>importance sampling</em> will address.</p>
+	    <h2 id="ais">3. Annealed Importance Sampling</h2>
+
+	    <p>Let's recap. We wanted to find the number of ways of safely placing \(n\) queens on an \(n\)-by-\(n\) chessboard. Exhaustive counting is too slow, and so is uniform Monte Carlo integration of the indicator function of the solution set.</p>
+	    <h3>Motivation</h3>
+	    <p>There are a few important facts that will let us get around the problem of vanishing \(p(n)\). Here is fact number one, stated abstractly.</p>
+	    <ol>
+		<li value="1">Given positive numbers \(A\lt B \lt C\), the fractions involved in the equation \[\frac{A}{C}=\frac{A}{B}\frac{B}{C}\] are larger on the right hand side than the left hand side.</li>
+	    </ol>
+	    <p>Applying this fact to our problem, we can estimate \(Q(n)/n!\) by constructing a sequence of intermediate fractions whose size we may better estimate individually. To do that, we need a way to climb monotonically from \(Q(n)\) to \(n\). </p>
+	    <h4>Interpolating between \(Q(n)\) and \(n!\)</h4>
+	    <p>Recall that these \(Q(n)\) and \(n!\) may be understood as discrete integrals of indicator functions on \(\mathcal{S}\) and \(\mathcal{P}\), respectively. This hint leads us to fact number two.</p>
+	    <ol>
+		<li value="2">An interpolation from \(\mathbf{1}_\mathcal{P}\) to \(\mathbf{1}_\mathcal{S}\) is provided by the <em>Boltzmann</em> function \[X \mapsto \exp{(-\beta f(X))}\] when the <em>inverse temperature</em> \(\beta\) varies from \(0\) to \(\infty\), and \(f\) is a positive <em>energy</em> function that is zero on the solution set \(\mathcal{S}\).<a href="#footnotes">[2]</a></li>
+	    </ol>
+	    <p>Play with the \(\beta\) slider to see how it <em>tempers</em> the original function, singling out the two solutions (\(n=4\)).</p>
+	    <div class=Buttons>
+		<label for="BoltzmannBetaSlider">\(\beta\)</label>
+		<input type="range" id="BoltzmannBetaSlider" min="0" max="5" value="0" step="0.5" />
+		<span id="BoltzmannBetaSliderValue">0</span>
+	    </div>
+	    <canvas id="BoltzmannChart"></canvas>
+	    <p>Our choice of energy function \(f\) simply returns the number of diagonal threats. This energy function is nice for a reason that will make sense later.</p>
+<p>As a side note, if there are \(k\) queens in a diagonal, then that diagonal contributes \(k(k-1)/2\) threats to the energy function, and the total number of threats (energy) is the sum over all diagonals.</p>
+		<pre><code class="bordered">inline fn pairs(comptime T: type, k: T) T {
+    return @divExact(k * (k - 1), 2);
+}
+
+inline fn threats(diags: []isize) isize {
+    var sum: isize = 0;
+    for (diags) |d|
+        sum += pairs(isize, d);
+    return sum;
+}
+</pre></code>
+
+	    <p>Returning to the point, let's discuss how to use the intermediate functions to build a ladder from \(Q(n)\) to \(n!\). The discrete integral of the Boltzmann function is a <em>normalisation constant</em> \[Z(\beta)=\sum_{X\in \mathcal{P}}\exp{(-\beta f(X))}\] that yields the desired interpolation between \(Q(n)\) and \(n!\) since \(Q(n)=Z(\infty)\lt \dots \lt Z(0)= n!\). To apply this fact in our estimation, we create a <em>temperature schedule</em> \(\beta_1 \lt \beta_2\lt \dots \lt \beta_K\approx \infty\), and compute the number of solutions as follows: \[\frac{Q(n)}{n!}=\prod_{k=1}^{K-1} \frac{Z(\beta_{k+1})}{Z(\beta_k)}:= \prod_{k=1}^{K-1} w_k.\]</p>
+	    <p>Now, the schedule design matters. If \(\beta_k\) and \(\beta_{k+1}\) are close enough, then so are \(Z(\beta_{k})\) and \(Z(\beta_k)\), thus we benefit from balancing the factors. Too close, and we waste our time on factors with no impact.</p>
+	    <p>Designing a well-balanced temperature schedule depends on how we estimate the fractions, so we turn our attention to this problem next.
+	    <h3>Importance sampling</h3>
+
+	    <p>Instead of uniform sampling, we switch to Boltzmann sampling. To make the switch, introduce the <em>Boltzmann distribution</em> \[\pi_{\beta}(X)=\frac{\exp{(-\beta f(X))}} {Z(\beta)}\] in the formula as follows. \[w_k=\sum_{X\in\mathcal{P}}\exp{\left(-(\beta_{k+1} - \beta_k)f(X)\right)}\pi_{\beta_k}(X).\] This lets us estimate the very same ratio by drawing M independent samples \(X_1,\dots, X_M\) according to \(\pi_{\beta_k}\) and computing the estimator \[\hat{w}_k=\frac{1}{M}\sum_{m=1}^M \exp{(-(\beta_{k+1}-\beta_k)f(X_m))}.\]</p>
+	    <p>This switch of sampling distributions an example of <em>importance sampling</em>. The new estimator is unbiased in the sense that \[\mathbb{E}_{\pi_{\beta_k}}\left[\hat{w}_{k}\right]=w_k,\] and it has lower variance than a uniform estimator since lower energy elements are sampled more often under \(\pi_\beta\) than under the uniform distribution. Either way, our final estimator of \(Q(n)/n!\) is \[\hat{p}(n)=\prod_{k=1}^{K-1}\hat{w}_{k}.\]</p>
+	    <p>But doesn't this mean we have to incur the cost of computing the distribution \(\pi_\beta\) with its \(n!\)-sized support? Actually, the answer is no.</p>
+	    <h3>Metropolis algorithm</h3>
+	    <p>To sample according to \(\pi_\beta\), we set up a Markov chain whose limiting distribution is theoretically \(\pi_\beta\). Press the 🔥 button to make a random Markov chain transition: a column swap.</p>
+	    <div class=Buttons>
+		<div class="Button" onclick=swapRandom()>🔥</div>
+	    </div>
+	    <div class="chessboard foursquares" id="Swapboard"></div>
+	    <div class="spacer"/>
+		<p>By making enough of these swaps, the permutation of queens becomes more and more shuffled. As a result, the limiting distribution of permutations is uniform, corresponding to \(\pi_0\).</p>
+		<p>The <em>Metropolis algorithm</em> augments the chain so that the limiting distribution is any \(\pi_\beta\) at all. It consists of repeating the following steps for as long as required. The result is a sequence of samples that tend to \(\pi_\beta\) in distribution.</p>
+		<ol>
+		    <li>Propose a Markov chain transition.</li>
+		    <li>Accept the transition with probability \(\min\{1, \exp{(-\beta\Delta f)}\}.\)</li>
+		</ol>
+		<p>The energy change \(\Delta f\) is the difference in energy if the transition were accepted. For our number-of-diagonal-threats energy function \(f\), the energy change is computable in \(O(1)\). Additionally, this \(f\) acts as a search heuristic that naturally leads the chain to solutions.</p>
+		<p>Press the 🏛️ button to run the Metropolis algorithm.</p>
+            <section>
+		<div>
+		    <div class="Buttons">
+			<div class="Button" onclick=stepMetropolis(1)>🏛️</div>
+			<div class="Button" onclick=stepMetropolis(1000)>1K🏛️</div>
+		    </div>
+		    <canvas id="MplsChart"></canvas>
+		</div>
+
+		<p>Notice how the hot distribution converges quickly, while the cold one converges slowly (try ~50k steps). Convergence is slower because bad swaps are discouraged at lower temperatures, and potentially many bad swaps are required to move between solutions.</p>
+		<h3>Designing a temperature schedule</h3>
+		<p>Recall that we wanted a temperature schedule that balances the fractions \(w_k\) as fairly as possible. It turns out that balancing the KL divergence of successive \(\pi_{\beta_k}\) is a simple proxy for this goal. </p>
+		<h4>KL-constant temperature schedule</h4>
+
+		<p>Suppose we aim to keep the KL divergence fixed at some \(\alpha \gt 0\). Then after running Metropolis it suffices to choose \[\Delta\beta = \sqrt{\frac{2\alpha}{\operatorname{Var}[f]}},\]</p>
+		<p>and update \(\beta \leftarrow \beta + \Delta\beta\). Here, \(\operatorname{Var}\left[f\right]\) is estimated from the Metropolis samples with Bessel correction. <a href="#footnotes">[3]</a> We stop once \(\beta\) surpasses a maximum \(\beta_K := \beta^*\).		<h4>Maximum inverse temperature \(\beta^*\)</h4>
+		<p>Theoretically, \(\beta^*\) is a stand-in for \(\infty\), but in practice there is a tradeoff to consider when choosing finite \(\beta^*\).</p> 
+		<ol>
+		    <li>Small \(\beta^*\) means \(\pi_{\beta^*}\) doesn't put enough weight on \(\mathcal{S}\). This leads to over-estimating \(p(n)\), equivalent to dropping factors \(w_{k\gg 1}\).</li>
+		    <li>Large \(\beta^*\) and \(M\) finite with the Metropolis chain restarting from the highest-energy position, skews the energy distribution and thus the extra factors \(\hat{w}_{k\gg 1}\lt1\) begin to drag the estimate down.</li>
+		</ol>
+
+		<p>We can avoid situation (1) by increasing \(\beta\) until almost-all (99.9%) of Metropolis samples have energy zero. Additionally, we can mitigate the effects of the Metropolis warm-up period causing the non-unity of \(\hat{w}_{k\gg1}\) in situation (2) by re-using the final board state from the previous temperature.</p>
+
+		<h3>Algorithm</h3>
+		<p>This is the outline of annealed importance sampling.</p>
+		<ol>
+		    <li>Decide on \(M\), \(\alpha\). Initialize board and \(\beta_0=0\).</li>
+		    <li>For \(k=1,2,\dots\)
+			<ol>
+			    <li value="1">With Metropolis, sample \(X_1,\dots,X_M\sim \pi_{\beta_k}\)</li>
+			    <li value="2">Pick \(\Delta\beta\) and update \(\beta \leftarrow \beta + \Delta\beta\).</li>
+			    <li value="3">Compute \(\hat{w}_k = \frac{1}{M}\sum_{m=1}^M \exp{(-\Delta\beta f(X_m))}\)</li>
+			    <li value="4">If 99.9% of samples have \(f(X_m)=0\) then break.</li>
+			</ol>
+		    </li>
+		    <li>Return \(n!\prod_k \hat{w}_k\)</li>
+		</ol>
+		<p>Here's what the outline might look like in Zig.</p>
+		<span onclick=toggleHidden('zig4')>
+		    <pre><code id="zig4" class="bordered">
+			<div>Click to reveal / hide.</div>
+			<div class=hidden>// convenient casting
+inline fn F64(x: anytype) f64 {
+    return @floatFromInt(x);
+}
+
+// annealed importance sampling
+fn ais(
+    comptime n: usize,
+    comptime M: usize,
+) f64 {
+
+    // set up random number generator
+    var rng = std.Random.DefaultPrng.init(0);
+    const rand = rng.random();
+
+    // set up board.
+    var board: [n]usize = undefined;
+    fill(n, &board);
+    var diags: [4 * n - 2]isize = undefined;
+    fillDiags(n, &board, &diags);
+
+    // initialize schedule and estimate
+    var beta: f64 = 0;
+    var estimate: f64 = 0;
+
+    while (true) {
+
+        var energies: [M]usize = undefined;
+        metropolis(n, M, rand, &board, &diags, beta, &energies);
+
+        const delta_beta = compute_delta_beta(&energies);
+        beta += delta_beta;
+
+        var w: f64 = 0;
+        for (energies) |f|
+            w += @exp(-delta_beta * F64(f));
+
+        estimate += @log(w) - @log(F64(M));
+
+        var sum: usize = 0;
+        for (energies) |f| {
+            sum += if (f == 0) 1 else 0;
+        }
+        if (F64(sum) >= 0.999 * F64(M)) break;
+    }
+
+    for (1..(n + 1)) |i|
+        estimate += @log(F64(i));
+
+    return @exp(estimate);
+}</div>
+		    </code></pre>
+		</span>
+				<p>Now let's dive in to the implementation of the Metropolis algorithm. We need to compute the <em>change</em> of energy \(\Delta f\) due to a column swap. This only involves looking at eight indices, so it may be done in \(O(1)\).</p>
+		<span onclick=toggleHidden('zig5')>
+		    <pre><code id="zig5" class="bordered">
+		    <div>Click to reveal / hide</div>
+		    <div class=hidden>inline fn metropolis(
+    comptime n: usize,
+    comptime M: usize,
+    rand: std.Random,
+    board: []usize,
+    diags: []isize,
+    beta: f64,
+    energies: []usize,
+) void {
+    var energy: usize = @intCast(threats(diags));
+    for (0..M) |m| {
+        energies[m] = energy;
+
+        // Pick two columns to swap
+        const c1 = rand.uintAtMost(usize, n - 1);
+        const c2 = (c1 + 1 + rand.uintAtMost(usize, n - 2)) % n;
+        const r1 = board[c1];
+        const r2 = board[c2];
+
+        // Note indices of occupied diagonals.
+        const offset = 3 * n - 2;
+	const diag_idxs: [8]usize = .{
+	    r1 + c1,
+	    offset + r1 - c1,
+	    r2 + c2,
+	    offset + r2 - c2,
+	    r2 + c1,
+	    offset + r2 - c1,
+	    r1 + c2,
+	    offset + r1 - c2,
+	};
+
+	// Change in number of pieces on diagonal due to swap.
+        const piece_deltas: [8]isize = .{ -1, -1, -1, -1, 1, 1, 1, 1 };
+
+        // Compute energy change due to swap
+        const energy_delta = step(diags, diag_idxs, piece_deltas);
+
+        // If swap accepted, commit and update board, energy, diagonals 
+        if (@log(rand.float(f64)) < @min(0, -beta * F64(energy_delta))) {
+            const tmp = board[c1];
+            board[c1] = board[c2];
+            board[c2] = tmp;
+
+            energy = @intCast(@as(isize, @intCast(energy)) + energy_delta);
+
+            for (0..8) |i|
+                diags[diag_idxs[i]] += piece_deltas[i];
+        }
+    }
+}</div></code></pre>
+		</span>
+<p>But some of those indices may overlap, for instance when two queens are initially on the same diagonal. So we can count the change in threats due to both queens leaving, simultaneously.</p>
+		<span onclick=toggleHidden('zig4.5')>
+		    <pre><code id="zig4.5" class="bordered">
+			<div>Click to reveal / hide.</div>
+<div class=hidden>inline fn step(
+    diags: []isize,		// how many queens per diagonal
+    diag_idxs: [8]usize,	// diagonals involved in the swap
+    piece_deltas: [8]isize,	// whether those diagonals lose or gain a piece
+) isize {
+    var energy_delta: isize = 0;
+
+    // Count the total gain or loss of pieces per diagonal
+    var diag_read: [8]bool = .{false} ** 8;
+    for (0..8) |i| {
+        if (diag_read[i]) continue;
+
+        const idx = diag_idxs[i];
+        var total_piece_delta = piece_deltas[i];
+
+        // Look ahead to see if diagonal is involved with other piece
+        for (i + 1..8) |j| {
+            if (diag_idxs[j] == idx and !diag_read[j]) {
+                total_piece_delta += piece_deltas[j];
+                diag_read[j] = true;
+            }
+        }
+
+        // Continue if number of pieces stays the same.
+        if (total_piece_delta == 0) continue;
+
+	// Compute change in number of threats
+        const d_old = diags[idx];
+        const d_new = d_old + total_piece_delta;
+        energy_delta += pairs(isize, d_new) - pairs(isize, d_old);
+    }
+
+    return energy_delta;
+}</div>
+		    </code></pre>
+		</span>
+		<p>Missing here is the code computing \(\Delta\beta\), which is not very interesting.</p>
+		<h3>Results</h3>
+		<p>We deploy the algorithm as follows. Fix \(\alpha=0.001\). Take \(M=25'000\) samples. Here we record \(K\) and \(\beta^*\) out of interest.</p>
+		<table class="numbers">
+		    <tr>
+			<td>\(n\)</td>
+			<td>solutions</td>
+			<td><b>AIS</b> (balanced KL)</td>
+			<td>\(K\)</td>
+			<td>\(\beta^*\)</td>
+			<td>time (s)</td>
+		    </tr>
+		    <tr>
+			<td>4</td>
+			<td>2</td>
+			<td>2</td>
+			<td>73</td>
+			<td>15.404</td>
+			<td>5.577</td>
+
+		    </tr>
+		    <tr>
+			<td>5</td>
+			<td>10</td>
+			<td>10</td>
+			<td>65</td>
+			<td>5.563</td>
+			<td>5.016</td>
+		    </tr>
+		    <tr>
+			<td>6</td>
+			<td>4</td>
+			<td>5</td>
+			<td>83</td>
+			<td>6.102</td>
+			<td>6.346</td>
+		    </tr>
+		    <tr>
+			<td>7</td>
+			<td>40</td>
+			<td>41</td>
+			<td>92</td>
+			<td>8.074</td>
+			<td>7.272</td>
+
+		    </tr>
+		    <tr>
+			<td>8</td>
+			<td>92</td>
+			<td>97</td>
+			<td>105</td>
+			<td>10.242</td>
+			<td>8.059</td>
+		    </tr>
+		    <tr>
+			<td>9</td>
+			<td>352</td>
+			<td>359</td>
+			<td>112</td>
+			<td>\(\infty\)</td>
+			<td>8.770</td>
+		    </tr>
+		    <tr>
+			<td>10</td>
+			<td>724</td>
+			<td>850</td>
+			<td>118</td>
+			<td>10.319</td>
+			<td>9.049</td>
+		    </tr>
+		    <tr>
+			<td>11</td>
+			<td>2'680</td>
+
+			<td>2'737</td>
+			<td>126</td>
+			<td>10.633</td>
+			<td>9.552</td>
+		    </tr>
+		    <tr>
+			<td>12</td>
+			<td>14'200</td>
+			<td>14'563</td>
+			<td>133</td>
+			<td>\(\infty\)</td>
+			<td>10.463</td>
+		    </tr>
+		    <tr>
+			<td>13</td>
+			<td>73'712</td>
+			<td>78'710</td>
+			<td>141</td>
+			<td>\(\infty\)</td>
+			<td>11.038</td>
+		    </tr>
+		    <tr>
+			<td>14</td>
+			<td>365'596</td>
+			<td>378'424</td>
+			<td>149</td>
+			<td>11.767</td>
+			<td>11.357</td>
+
+		    </tr>
+		    <tr>
+			<td>15</td>
+			<td>2'279'184</td>
+			<td>2'301'984</td>
+			<td>153</td>
+			<td>\(\infty\)</td>
+			<td>11.610</td>
+		    </tr>
+		    <tr>
+			<td>16</td>
+			<td><b>?</b></td>
+			<td>15'307'300</td>
+			<td>159</td>
+			<td>\(\infty\)</td>
+			<td>12.003</td>
+
+		    </tr>
+		</table>
+		<p>Not bad, right? To clear up any confusion \(\beta^*=\infty\) occurs when all samples have energy zero, which causes \(\Delta\beta\) to blow up. <i>In my code I added a small constant in the denominator to prevent this, so it actually shows up as \(\beta^*\approx 52\).</i></p>
+		<p>So far, we pretended \(Q(16)\) was unknown, but in fact it is known to be 14'772'512. That makes ours a pretty good guess for a 12 second calculation! Let's push our luck and compare results for \(n=27\), the known maximum.</p>
+		<table class="numbers">
+		    <tr>
+			<td>\(n\)</td>
+			<td>solutions</td>
+			<td><b>AIS</b> (balanced KL)</td>
+			<td>\(K\)</td>
+			<td>time (s)</td>
+		    </tr>
+		    <tr>
+			<td>27</td>
+			<td>234'907'967'154'122'528</td>
+			<td>240'409'405'794'640'320</td>
+			<td>203</td>
+			<td>14.256</td>
+		    </tr>
+		</table>
+		<p>And now, into the unknown!</p>
+		<table class=numbers>
+		    <tr>
+			<td>\(n\)</td>
+			<td>solutions</td>
+			<td><b>AIS</b> (balanced KL)</td>
+			<td>\(K\)</td>
+			<td>time (s)</td>
+		    </tr>
+		    <tr>
+			<td>50</td>
+			<td>?</td>
+			<td>2.982 \(\times 10^{44}\)</td>
+			<td>281</td>
+			<td>20.468</td>
+		    </tr>
+		    <tr>
+			<td>100</td>
+			<td>?</td>
+			<td>3.079\(\times 10^{117}\)</td>
+			<td>391</td>
+			<td>27.809</td>
+		    </tr>
+		    <tr>
+			<td>200</td>
+			<td>?</td>
+			<td>2.248 \(\times 10^{293}\)</td>
+			<td>530</td>
+			<td>37.658</td>
+		    </tr>
+		</table>
+		<h3>Conclusion</h3>
+		<p>Lots of open questions here! In particular,</p>
+		<ol>
+		    <li>Is there a more efficient balance of \(M\) and \(\alpha\)?</li>
+		    <li>Would a finer analysis for the choice of \(\Delta\beta\) result in better estimates?</li>
+		    <li>How should we adjust the estimate of \(\operatorname{Var}[f]\) given the autocorrelation inherent to Metropolis sampling?</li>
+		</ol>
+		<p>Overall, annealed importance sampling works really well for this problem, allowing us to get estimates that would be impossible under uniform Monte Carlo sampling.</p>
+		<h2>Ending note</h2>
+		<p>Of course, you could swap the \(n\)-queens problem for any high-dimensional estimation problem with an <i>energy</i> heuristic that measures solution quality. Can you think of other places you'd apply this method? Is there another puzzle you have in mind? I'm happy to chat over email at <code>oiliossatos@gmail.com</code>.</p>
 
 	    </section>
-
-
-            <section>
-                <h2>Sources</h2>
+	    <section>
+                <h2 id="footnotes">Footnotes</h2>
                 <hr>
-                <ul>
-                    <li>[<a href="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC2682695&blobtype=pdf" class="external">link</a>] Cheng Zhang & Jianpeng Ma. <i>Counting solutions for the N-queens and Latin-square problems by Monte Carlo simulations.</i></li>
-                </ul>
-                <p><i>09/04/2023</i></p>
+                <ol>
+                    <li>Cheng Zhang & Jianpeng Ma. 2019. <a href="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC2682695&blobtype=pdf" class="external"><i>Counting solutions for the N-queens and Latin-square problems by Monte Carlo simulations.</i>
+	</a></li>
+		    <li>
+	    <p>The appearance of physics vocabulary is explained by the connection of this method to the theory of thermodynamics. This great video is relevant: <a href="https://www.youtube.com/watch?v=itRV2jEtV8Q&t=531s" class=external> Simulating and understanding phase change | Vilas Winstein</a>.</p>
+		    </li>
+		    <li>
+		<p>Consider consecutive distributions \(\pi_\beta\) and \(\pi_{\beta + \Delta\beta}\). Their forward KL divergence is \[D_{KL}(\pi_\beta \| \pi_{\beta+\Delta\beta}) = \mathbb{E}_{\pi_\beta}\left[\log\frac{\pi_\beta}{\pi_{\beta+\Delta\beta}}\right].\] Plugging in definitions, we can show that \[\log\frac{\pi_\beta(X)}{\pi_{\beta + \Delta\beta}(X)}=\Delta\beta f(X) + \log Z(\beta+\Delta\beta) - \log Z(\beta).\] We are interested in simplifying this expression. Note that \(Z(\beta + \Delta\beta)\) factors as \[Z(\beta + \Delta\beta) = Z(\beta)\mathbb{E}_{\pi_\beta}\left[\exp{(-\Delta\beta f)}\right].\]</p>
+		<p>Taking logs on both sides, we have \[\log{Z(\beta + \Delta\beta)} = \log{Z(\beta)} + \log{\mathbb{E}_{\pi_\beta}}\left[\exp{(-\Delta\beta f)}\right],\] where the second term is the cumulant generating function of \(-f\) under \(\pi_\beta\). Hence in terms of familiar statistics we have \[\log{Z(\beta + \Delta\beta)} \approx \log{Z(\beta)} - \Delta\beta \mathbb{E}_{\pi_\beta}\left[f\right] + \frac{1}{2}(\Delta\beta)^2\operatorname{Var}_{\pi_\beta}\left[f\right].\]</p>
+		<p>Substituting this into previous formula yields the following approximation of KL divergence: \[D_{KL}(\pi_\beta \| \pi_{\beta + \Delta\beta}) \approx \frac{1}{2}(\Delta\beta)^2\operatorname{Var}_{\pi_\beta}\left[f\right],\]which can be solved for \(\Delta \beta\).</p>
+	
+
+
+		    </li>
+                </ol>
             </section> 
 
-            <p><i>WIP | Last edited 20/04/2023</i></p>
+            <p><i>Last edited 12/09/2025</i></p>
         </article>
     </main>
     <script src="../code/nqueens/chessboard.js"></script>
